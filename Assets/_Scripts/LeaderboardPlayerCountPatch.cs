@@ -47,12 +47,5 @@ namespace TNHQoLImprovements
             var playerCountComponent = gObjLeaderboard.AddComponent<LeaderboardPlayerCount>();
             playerCountComponent.Init(__instance, uiGlobalText, gObjLoading);
         }
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(TNH_ScoreDisplay), "SwitchToModeID")]
-        public static void OnModeIDSwitch_Post(string id, TNH_ScoreDisplay __instance)
-        {
-            Debug.Log(string.Format("Changing scoreboard mode to {0}!", id));
-        }
     }
 }

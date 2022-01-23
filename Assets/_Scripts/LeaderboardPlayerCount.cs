@@ -20,15 +20,16 @@ namespace TNHQoLImprovements
 		private Text lblGlobalScores;
 		private GameObject gObjLoading;
 
-		public void Start()
-        {
-			Debug.Log("--- Installed BepInEx Plugins ---");
-			foreach (var plugin in Chainloader.PluginInfos)
-            {
-				Debug.Log(plugin.Key);
-            }
-			Debug.Log("--- End Plugins ---");
-		}
+        #region INITIALIZATION
+  //      public void Start()
+  //      {
+		//	Debug.Log("--- Installed BepInEx Plugins ---");
+		//	foreach (var plugin in Chainloader.PluginInfos)
+  //          {
+		//		Debug.Log(plugin.Key);
+  //          }
+		//	Debug.Log("--- End Plugins ---");
+		//}
 
 		public void Init(TNH_ScoreDisplay tnhScore, Text scoreLabel, GameObject gObjLoading)
 		{
@@ -51,8 +52,10 @@ namespace TNHQoLImprovements
 
 			initialized = true;
 		}
+        #endregion
 
-		private void Update()
+        #region UPDATE
+        private void Update()
 		{
 			if (!initialized || tnhTweakerInstalled)
 				return;
@@ -81,4 +84,5 @@ namespace TNHQoLImprovements
 			}
 		}
 	}
+	#endregion
 }

@@ -4,9 +4,9 @@ This mod adds quality of life improvements to the *Take and Hold* experience.
 ## Features
 * More visible HP counter
 * Token and hold counter on wrist
-* Player count for online leaderboards
-  * Incompatiible with TNHTweaker
+* Player count for online leaderboards; see how you stack up!
+  * Incompatible with [*TakeAndHoldTweaker*](https://h3vr.thunderstore.io/package/devyndamonster/TakeAndHoldTweaker/); feature will be disabled!
 
 Enable/disable these features in your mod manager's *Config editor*.
 
-**The [TNH Leaderboard Player Count](https://h3vr.thunderstore.io/package/muskit/TNH_Leaderboard_Player_Count/) has been merged with this mod. Please remove that mod as it lacks features and is no longer supported.**
+**NOTE: [*TNH Leaderboard Player Count*](https://h3vr.thunderstore.io/package/muskit/TNH_Leaderboard_Player_Count/) has been merged with this mod. If installed, please remove that mod as it lacks features and is no longer supported.**
