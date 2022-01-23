@@ -8,3 +8,5 @@ This mod adds quality of life improvements to the *Take and Hold* experience.
   * Incompatiible with TNHTweaker
 
 Enable/disable these features in your mod manager's *Config editor*.
+
+**The [TNH Leaderboard Player Count](https://h3vr.thunderstore.io/package/muskit/TNH_Leaderboard_Player_Count/) has been merged with this mod. Please remove that mod as it lacks features and is no longer supported.**
