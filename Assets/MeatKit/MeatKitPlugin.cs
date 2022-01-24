@@ -33,6 +33,7 @@ public class MeatKitPlugin : BaseUnityPlugin
     private static readonly string BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 #pragma warning restore 414
     public static AssetBundle bundle;
+    public static ConfigEntry<bool> cfgShowLPC;
     public static ConfigEntry<bool> cfgSolidifyHPText;
     public static ConfigEntry<bool> cfgShowHPBackground;
     public static ConfigEntry<float> cfgHPBackgroundOpacity;
@@ -48,12 +49,16 @@ public class MeatKitPlugin : BaseUnityPlugin
     private void SceneChanged(Scene from, Scene to)
     {
         //Logger.LogInfo(string.Format("scene chg: {0} --> {1}", from.name, to.name));
-        if(GameObject.Find("_NewTAHReticle") != null)
+        Logger.LogInfo("_GameManager present: " + (GameObject.Find("_GameManager") != null));
+        Logger.LogInfo("TNH_Manager object present: " + (FindObjectOfType<FistVR.TNH_Manager>() != null));
+        if(GameObject.Find("_GameManager") != null || FindObjectOfType<FistVR.TNH_Manager>() != null)
         {
+            Logger.LogInfo("We are in a TNH game!");
             instance = new GameObject().AddComponent<InPlay>();
         }
         else
         {
+            Logger.LogInfo("We are NOT in a TNH game!");
             Destroy(instance);
         }
     }
@@ -78,6 +83,10 @@ public class MeatKitPlugin : BaseUnityPlugin
                                         "Solidify HP text",
                                         true,
                                         "Set opacity of HP text to full and give it a shadow.");
+        cfgShowLPC = Config.Bind("Game Info",
+                                 "Show player count in online leaderboards",
+                                 true,
+                                 "Shows the number of players in the currently selected TNH leaderboard.");
         cfgShowTokens = Config.Bind("Game Info",
                                     "Show Tokens",
                                     true,
@@ -88,7 +97,8 @@ public class MeatKitPlugin : BaseUnityPlugin
                                    "Shows how many holds the player has completed by their radar hand.");
 
         // patch leaderboard code
-        lpc = new LeaderboardPlayerCountPatch();
+        if (cfgShowLPC.Value)
+            lpc = new LeaderboardPlayerCountPatch();
 
         // give 120 seconds to search for old mod
         lpcModSearchTimeEnd = Time.realtimeSinceStartup + 120;
@@ -116,7 +126,7 @@ public class MeatKitPlugin : BaseUnityPlugin
 
         if (Time.realtimeSinceStartup >= lpcModSearchTimeEnd)
         {
-            Logger.LogWarning("Stopping search for TNH Leaderboard Player Count mod after 120 seconds.");
+            Logger.LogInfo("Stopping search for TNH Leaderboard Player Count mod after 120 seconds.");
             lpcModGone = true;
         }
     }
