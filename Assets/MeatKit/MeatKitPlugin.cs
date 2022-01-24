@@ -32,18 +32,18 @@ public class MeatKitPlugin : BaseUnityPlugin
 #pragma warning disable 414
     private static readonly string BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 #pragma warning restore 414
-
-    private bool lpcKilled = false;
-
     public static AssetBundle bundle;
-
-    public static ConfigEntry<bool> showHPBackground;
-    public static ConfigEntry<float> hpBackgroundOpacity;
-    public static ConfigEntry<bool> showTokens;
-    public static ConfigEntry<bool> showHolds;
-
+    public static ConfigEntry<bool> cfgSolidifyHPText;
+    public static ConfigEntry<bool> cfgShowHPBackground;
+    public static ConfigEntry<float> cfgHPBackgroundOpacity;
+    public static ConfigEntry<bool> cfgShowTokens;
+    public static ConfigEntry<bool> cfgShowHolds;
+    
     private static InPlay instance;
+    
     private LeaderboardPlayerCountPatch lpc;
+    private bool lpcModGone = false;
+    private float lpcModSearchTimeEnd;
 
     private void SceneChanged(Scene from, Scene to)
     {
@@ -66,35 +66,42 @@ public class MeatKitPlugin : BaseUnityPlugin
         LoadAssets();
 
         // setup configuration
-        showHPBackground = Config.Bind("Health Counter",
-                                       "Background enabled",
-                                       true,
-                                       "Apply a background to the health text.");
-        hpBackgroundOpacity = Config.Bind("Health Counter",
-                                          "Background opacity",
-                                          0.74f,
-                                          "Set opacity of health text's background (if enabled).");
-        showTokens = Config.Bind("Game Info",
-                                 "Show Tokens",
-                                 true,
-                                 "Shows how many tokens the player has by their radar hand.");
-        showHolds = Config.Bind("Game Info",
-                                "Show Holds",
-                                true,
-                                "Shows how many holds the player has completed by their radar hand.");
+        cfgShowHPBackground = Config.Bind("Health Counter",
+                                          "Background enabled",
+                                          true,
+                                          "Apply a background to the health text.");
+        cfgHPBackgroundOpacity = Config.Bind("Health Counter",
+                                             "Background opacity",
+                                             0.74f,
+                                             "Set opacity of health text's background (if enabled).");
+        cfgSolidifyHPText = Config.Bind("Health Counter",
+                                        "Solidify HP text",
+                                        true,
+                                        "Set opacity of HP text to full and give it a shadow.");
+        cfgShowTokens = Config.Bind("Game Info",
+                                    "Show Tokens",
+                                    true,
+                                    "Shows how many tokens the player has by their radar hand.");
+        cfgShowHolds = Config.Bind("Game Info",
+                                   "Show Holds",
+                                   true,
+                                   "Shows how many holds the player has completed by their radar hand.");
 
-        // patch the leaderboard
+        // patch leaderboard code
         lpc = new LeaderboardPlayerCountPatch();
+
+        // give 120 seconds to search for old mod
+        lpcModSearchTimeEnd = Time.realtimeSinceStartup + 120;
     }
     // DO NOT EDIT.
     private void LoadAssets() {}
 
     /// <summary>
-    /// Its only purpose: to kill TNH Leaderboard Player Count
+    /// Its only purpose: to kill the deprecated TNH Leaderboard Player Count mod.
     /// </summary>
     private void Update()
     {
-        if (lpcKilled)
+        if (lpcModGone)
             return;
 
         foreach (var plugin in Chainloader.PluginInfos)
@@ -103,8 +110,14 @@ public class MeatKitPlugin : BaseUnityPlugin
             {
                 Logger.LogWarning("TNH Leaderboard Player Count mod detected. Destroying it to avoid interference.");
                 Destroy(plugin.Value.Instance);
-                lpcKilled = true;
+                lpcModGone = true;
             }
+        }
+
+        if (Time.realtimeSinceStartup >= lpcModSearchTimeEnd)
+        {
+            Logger.LogWarning("Stopping search for TNH Leaderboard Player Count mod after 120 seconds.");
+            lpcModGone = true;
         }
     }
 }
