@@ -14,9 +14,9 @@ MonoBehaviour:
   PackageName: TNH_Quality_of_Life_Improvements
   Author: muskit
   Version: 1.0.0
-  Icon: {fileID: 2800000, guid: f999bddab1821b94691466e97cc6891f, type: 3}
+  Icon: {fileID: 2800000, guid: 785b7946398f5314b95bf593d2d77d67, type: 3}
   ReadMe: {fileID: 102900000, guid: ab1d6dea017447a48ac348db588a6f35, type: 3}
-  WebsiteURL: 
+  WebsiteURL: https://github.com/muskit/TNH-Quality-of-Life-Improvements
   Description: Quality of life improvements to the Take and Hold experience.
   AdditionalDependencies:
   - BepInEx-BepInExPack_H3VR-5.4.1700

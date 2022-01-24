@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using BepInEx;
+using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,6 +32,8 @@ public class MeatKitPlugin : BaseUnityPlugin
 #pragma warning disable 414
     private static readonly string BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 #pragma warning restore 414
+
+    private bool lpcKilled = false;
 
     public static AssetBundle bundle;
 
@@ -85,5 +88,24 @@ public class MeatKitPlugin : BaseUnityPlugin
     }
     // DO NOT EDIT.
     private void LoadAssets() {}
+
+    /// <summary>
+    /// Its only purpose: to kill TNH Leaderboard Player Count
+    /// </summary>
+    private void Update()
+    {
+        if (lpcKilled)
+            return;
+
+        foreach (var plugin in Chainloader.PluginInfos)
+        {
+            if (plugin.Key == "me.muskit.tnhLeaderboardPlayerCount")
+            {
+                Logger.LogWarning("TNH Leaderboard Player Count mod detected. Destroying it to avoid interference.");
+                Destroy(plugin.Value.Instance);
+                lpcKilled = true;
+            }
+        }
+    }
 }
 #endif
