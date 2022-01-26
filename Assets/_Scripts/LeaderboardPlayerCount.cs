@@ -15,22 +15,13 @@ namespace TNHQoLImprovements
 		private bool tnhTweakerInstalled = false;
 
 		private string curID;
+		private string loadingStr;
 
 		private TNH_ScoreDisplay scoreDisplay;
 		private Text lblGlobalScores;
 		private GameObject gObjLoading;
 
         #region INITIALIZATION
-  //      public void Start()
-  //      {
-		//	Debug.Log("--- Installed BepInEx Plugins ---");
-		//	foreach (var plugin in Chainloader.PluginInfos)
-  //          {
-		//		Debug.Log(plugin.Key);
-  //          }
-		//	Debug.Log("--- End Plugins ---");
-		//}
-
 		public void Init(TNH_ScoreDisplay tnhScore, Text scoreLabel, GameObject gObjLoading)
 		{
 			if (initialized)
@@ -41,12 +32,13 @@ namespace TNHQoLImprovements
 			this.lblGlobalScores.resizeTextForBestFit = true;
 			this.lblGlobalScores.horizontalOverflow = HorizontalWrapMode.Overflow;
 			this.gObjLoading = gObjLoading;
+			loadingStr = gObjLoading.GetComponentInChildren<Text>().text;
 
 			var loadedAssemblies = System.AppDomain.CurrentDomain.GetAssemblies();
 			if (Array.Exists<Assembly>(loadedAssemblies, x => x.GetName().Name == "TakeAndHoldTweaker"))
 			{
 				tnhTweakerInstalled = true;
-				this.gObjLoading.transform.GetChild(0).GetComponent<Text>().text = "<color=lightblue>Online leaderboards player count is incompatible with TNHTweaker.</color>";
+				this.gObjLoading.transform.GetChild(0).GetComponent<Text>().text = "<color=lightblue><size=30>Online player count is incompatible with TNHTweaker.</size></color>";
 				this.gObjLoading.SetActive(true);
 			}
 
@@ -66,23 +58,31 @@ namespace TNHQoLImprovements
 		}
 
 		private void UpdatePlayerCountDisplay(string id)
-		{
-			try
-			{
-				string playerCountText = Steamworks.SteamUserStats
-					.GetLeaderboardEntryCount(HighScoreManager.Leaderboards[id])
-					.ToString("N0");
-				lblGlobalScores.text = "Global Scores: <color=lightblue>(" + playerCountText + " players)</color>";
-				curID = id;
+        {
+            try
+            {
+                string playerCountText = Steamworks.SteamUserStats
+                    .GetLeaderboardEntryCount(HighScoreManager.Leaderboards[id])
+                    .ToString("N0");
+
+                lblGlobalScores.text = "Global Scores: <color=lightblue>(" + playerCountText + " players)</color>";
+                curID = id;
 				gObjLoading.SetActive(false);
-			}
-			catch (KeyNotFoundException e)
-			{
-				lblGlobalScores.text = "Global Scores:";
+            }
+            catch (KeyNotFoundException e)
+            {
+                lblGlobalScores.text = "Global Scores:";
+				gObjLoading.GetComponentInChildren<Text>().text = loadingStr;
 				gObjLoading.SetActive(true);
-				curID = null;
+                curID = null;
+            }
+            catch (Exception e)
+            {
+                gObjLoading.GetComponentInChildren<Text>().text = string.Format("<color=lightblue><size=30>Unknown error occured trying to retrieve online player count.</size></color>\n\n" +
+					"<color=red>{0}</color>", e);
+                gObjLoading.SetActive(true);
 			}
-		}
-	}
+        }
+    }
 	#endregion
 }

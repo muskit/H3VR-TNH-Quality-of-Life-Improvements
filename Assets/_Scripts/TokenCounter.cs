@@ -9,8 +9,6 @@ namespace TNHQoLImprovements
 	{
 		void Start()
 		{
-			//transform.parent = GameObject.Find("_NewTAHReticle/TAHReticle_HealthBar").transform;
-			transform.parent = FindObjectOfType<TAH_Reticle>().transform.GetChild(3);
 			transform.localPosition = new Vector3(1, 0, -.5f);
 			transform.localRotation = Quaternion.Euler(90, 0, 0);
 			transform.localScale = new Vector3(0.002f, 0.002f, 0.002f);

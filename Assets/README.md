@@ -12,12 +12,15 @@ Enable/disable these features in your mod manager's *Config editor*.
 For any issues/ideas, please create an issue on the GitHub repo (linked on Thunderstore page).
 
 ## Changelog
+1.1.0
+* Added Health Crystals expiration indicator
+
 1.0.1
-* Fixed the in-play improvements only applying in Classic Hallways map (whoops!!)
+* Fixed the in-play improvements only applying to Classic Hallways map (whoops!!)
 * Added option to enable/disable showing player count of online leaderboards
 * Added option to enable/disable HP text opacity/shadow change
   * (Surprisingly, the HP text normally doesn't have full opacity)
-* Searching for TNH Leaderboards Player Count now stops after 120s
+* Searching for the deprecated TNH Leaderboards Player Count mod to kill now stops after 120s
 
 
 1.0.0

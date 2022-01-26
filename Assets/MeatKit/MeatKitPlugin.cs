@@ -1,4 +1,5 @@
 ﻿#if H3VR_IMPORTED
+using HarmonyLib;
 using System.IO;
 using System.Reflection;
 using BepInEx;
@@ -42,9 +43,10 @@ public class MeatKitPlugin : BaseUnityPlugin
     
     private static InPlay instance;
     
-    private LeaderboardPlayerCountPatch lpc;
     private bool lpcModGone = false;
     private float lpcModSearchTimeEnd;
+
+    private Harmony harmony;
 
     private void SceneChanged(Scene from, Scene to)
     {
@@ -61,6 +63,11 @@ public class MeatKitPlugin : BaseUnityPlugin
             Logger.LogInfo("We are NOT in a TNH game!");
             Destroy(instance);
         }
+    }
+
+    public MeatKitPlugin(): base()
+    {
+        harmony = new Harmony("muskit.TNHQualityOfLifeImprovements");
     }
 
     private void Awake()
@@ -96,11 +103,17 @@ public class MeatKitPlugin : BaseUnityPlugin
                                    true,
                                    "Shows how many holds the player has completed by their radar hand.");
 
+        // patch KillAll code (only acts w/ health crystals)
+        TimedHealthCrystalPatch.Patch(harmony);
+
         // patch leaderboard code
         if (cfgShowLPC.Value)
-            lpc = new LeaderboardPlayerCountPatch();
+            LeaderboardPlayerCountPatch.Patch(harmony);
+        
+        if(cfgShowHolds.Value)
+            HoldCounter.Patch(harmony);
 
-        // give 120 seconds to search for old mod
+        // give 120 seconds to search for old mod, which we want to kill
         lpcModSearchTimeEnd = Time.realtimeSinceStartup + 120;
     }
     // DO NOT EDIT.

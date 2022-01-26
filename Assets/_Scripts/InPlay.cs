@@ -11,10 +11,8 @@ namespace TNHQoLImprovements
 	public class InPlay : MonoBehaviour
 	{
 		private GameObject gObjHUD;
-		private GameObject gObjTokens;
 		public static TNH_Manager tnhManager;
 
-		#region INITIALIZATION
 		void ImproveHPTextReadability()
 		{
 			var canvas = gObjHUD.GetComponent<Canvas>();
@@ -60,10 +58,9 @@ namespace TNHQoLImprovements
 			if(MeatKitPlugin.cfgShowHPBackground.Value || MeatKitPlugin.cfgSolidifyHPText.Value)
 				ImproveHPTextReadability();
 			if (MeatKitPlugin.cfgShowTokens.Value)
-				Instantiate(MeatKitPlugin.bundle.LoadAsset<GameObject>("TokenCounter"));
+				Instantiate(MeatKitPlugin.bundle.LoadAsset<GameObject>("TokenCounter"), FindObjectOfType<TAH_Reticle>().transform.GetChild(3));
 			if (MeatKitPlugin.cfgShowHolds.Value)
-				Instantiate(MeatKitPlugin.bundle.LoadAsset<GameObject>("HoldCounter"));
+				Instantiate(MeatKitPlugin.bundle.LoadAsset<GameObject>("HoldCounter"), FindObjectOfType<TAH_Reticle>().transform.GetChild(3));
 		}
-		#endregion
 	}
 }

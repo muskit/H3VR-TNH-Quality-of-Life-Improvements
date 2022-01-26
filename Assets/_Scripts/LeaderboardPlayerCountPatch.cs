@@ -1,25 +1,24 @@
-﻿using HarmonyLib;
+﻿using System.Reflection;
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 using FistVR;
 
 namespace TNHQoLImprovements
 {
-    [HarmonyPatch]
-    public class LeaderboardPlayerCountPatch
+    public static class LeaderboardPlayerCountPatch
     {
-        Harmony harmony;
         private static GameObject gObjLoading;
         private static Text uiGlobalText;
 
-        public LeaderboardPlayerCountPatch()
+        public static void Patch(Harmony harmony)
         {
-            harmony = new Harmony("me.muskit.TNHQualityOfLifeImprovements.LeaderboardPlayerCount");
-            harmony.PatchAll();
+            var original = typeof(TNH_ScoreDisplay).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
+            var newfunc = typeof(LeaderboardPlayerCountPatch).GetMethod("Setup");
+
+            harmony.Patch(original, postfix: new HarmonyMethod(newfunc));
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(TNH_ScoreDisplay), "Start")]
         public static void Setup(TNH_ScoreDisplay __instance)
         {
             GameObject gObjLeaderboard = null;
