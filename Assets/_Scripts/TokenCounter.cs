@@ -9,11 +9,9 @@ namespace TNHQoLImprovements
 	{
 		void Start()
 		{
-			transform.localPosition = new Vector3(1, 0, -.5f);
-			transform.localRotation = Quaternion.Euler(90, 0, 0);
-			transform.localScale = new Vector3(0.002f, 0.002f, 0.002f);
+            transform.localPosition = new Vector3(333, 0, -450);
 
-			StartCoroutine(SetTokenImage());
+            StartCoroutine(SetTokenImage());
 		}
 
 		private IEnumerator SetTokenImage()

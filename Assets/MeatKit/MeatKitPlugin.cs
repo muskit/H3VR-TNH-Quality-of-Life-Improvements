@@ -34,13 +34,15 @@ public class MeatKitPlugin : BaseUnityPlugin
     private static readonly string BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 #pragma warning restore 414
     public static AssetBundle bundle;
+    public static Font fontAgencyFB;
     public static ConfigEntry<bool> cfgShowLPC;
     public static ConfigEntry<bool> cfgSolidifyHPText;
     public static ConfigEntry<bool> cfgShowHPBackground;
     public static ConfigEntry<float> cfgHPBackgroundOpacity;
     public static ConfigEntry<bool> cfgShowTokens;
     public static ConfigEntry<bool> cfgShowHolds;
-    
+    public static ConfigEntry<HealthExpireIndicationType> cfgHealthCrystalIndicator;
+
     private static InPlay instance;
     
     private bool lpcModGone = false;
@@ -50,9 +52,13 @@ public class MeatKitPlugin : BaseUnityPlugin
 
     private void SceneChanged(Scene from, Scene to)
     {
-        //Logger.LogInfo(string.Format("scene chg: {0} --> {1}", from.name, to.name));
-        Logger.LogInfo("_GameManager present: " + (GameObject.Find("_GameManager") != null));
-        Logger.LogInfo("TNH_Manager object present: " + (FindObjectOfType<FistVR.TNH_Manager>() != null));
+        var healthCounter = FindObjectOfType<FistVR.FVRHealthBar>();
+        if (healthCounter != null)
+        {
+            if (cfgShowHPBackground.Value || cfgSolidifyHPText.Value)
+                HPReadability.ImproveHPTextReadability(healthCounter.transform.GetChild(0).gameObject);
+        }
+
         if(GameObject.Find("_GameManager") != null || FindObjectOfType<FistVR.TNH_Manager>() != null)
         {
             Logger.LogInfo("We are in a TNH game!");
@@ -72,10 +78,15 @@ public class MeatKitPlugin : BaseUnityPlugin
 
     private void Awake()
     {
+        // MeatKit requirement
+        LoadAssets();
+
+        // get Agency FB from system
+        fontAgencyFB = Font.CreateDynamicFontFromOSFont("Agency FB", 16);
+
         // load asset bundle
         bundle = AssetBundle.LoadFromFile(Path.Combine(BasePath, "tnh_qol_improvements"));
         SceneManager.activeSceneChanged += SceneChanged;
-        LoadAssets();
 
         // setup configuration
         cfgShowHPBackground = Config.Bind("Health Counter",
@@ -90,34 +101,55 @@ public class MeatKitPlugin : BaseUnityPlugin
                                         "Solidify HP text",
                                         true,
                                         "Set opacity of HP text to full and give it a shadow.");
-        cfgShowLPC = Config.Bind("Game Info",
+        cfgShowLPC = Config.Bind("Take and Hold Info",
                                  "Show player count in online leaderboards",
                                  true,
                                  "Shows the number of players in the currently selected TNH leaderboard.");
-        cfgShowTokens = Config.Bind("Game Info",
+        cfgShowTokens = Config.Bind("Take and Hold Info",
                                     "Show Tokens",
                                     true,
                                     "Shows how many tokens the player has by their radar hand.");
-        cfgShowHolds = Config.Bind("Game Info",
+        cfgShowHolds = Config.Bind("Take and Hold Info",
                                    "Show Holds",
                                    true,
                                    "Shows how many holds the player has completed by their radar hand.");
+        cfgHealthCrystalIndicator = Config.Bind("Misc.",
+                                                "Show expiration of Health Crystals",
+                                                HealthExpireIndicationType.Flashing,
+                                                "Add a visual indication on the Health Crystal's despawn timer.");
+
+        // give 120 seconds to search for old mod, which we want to kill
+        lpcModSearchTimeEnd = Time.time + 120;
+
+        RunPatches();
+    }
+    // DO NOT EDIT.
+    private void LoadAssets() {}
+
+    private void RunPatches()
+    {
+        if (harmony == null)
+            return;
 
         // patch KillAll code (only acts w/ health crystals)
-        TimedHealthCrystalPatch.Patch(harmony);
+        if (cfgHealthCrystalIndicator.Value != HealthExpireIndicationType.None)
+            TimedHealthCrystalPatch.Patch(harmony);
 
         // patch leaderboard code
         if (cfgShowLPC.Value)
             LeaderboardPlayerCountPatch.Patch(harmony);
-        
-        if(cfgShowHolds.Value)
-            HoldCounter.Patch(harmony);
 
-        // give 120 seconds to search for old mod, which we want to kill
-        lpcModSearchTimeEnd = Time.realtimeSinceStartup + 120;
+        // for counting wins/loses
+        if (cfgShowHolds.Value)
+            HoldCounterPatch.Patch(harmony);
+
+        // stick stats to hand after game over
+        if (cfgShowHolds.Value || cfgShowTokens.Value)
+            InPlay.Patch(harmony);
+
+        WavePatch.Patch(harmony);
+        ShopCostPatch.Patch(harmony);
     }
-    // DO NOT EDIT.
-    private void LoadAssets() {}
 
     /// <summary>
     /// Its only purpose: to kill the deprecated TNH Leaderboard Player Count mod.

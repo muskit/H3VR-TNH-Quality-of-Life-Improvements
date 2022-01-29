@@ -5,6 +5,11 @@ using FistVR;
 
 namespace TNHQoLImprovements
 {
+    public enum HealthExpireIndicationType
+    {
+        None, Flashing, CircularGraphic
+    }
+
     /// <summary>
     /// If KillAfter is attached to a HealthCrystal, show visual representation of expiration.
     /// </summary>
@@ -29,27 +34,20 @@ namespace TNHQoLImprovements
             if (__instance.transform.GetComponentInChildren<HealthPickUp>() == null)
                 return;
 
-            Debug.Log("KillAfter will expire in " + __instance.DieTime + " seconds.");
-
             GameObject timer;
             Transform healthCrystal = __instance.transform.Find("HealthCrystal");
-            switch (VISUAL_APPROACH)
+            switch (MeatKitPlugin.cfgHealthCrystalIndicator.Value)
             {
-                case 0: // ring above
+                case HealthExpireIndicationType.CircularGraphic: // ring above
                     timer = GameObject.Instantiate<GameObject>(timerAsset, healthCrystal);
                     timer.GetComponent<UIRingTimer>().Init(__instance.DieTime);
                     timer.transform.localScale = new Vector2(0.001f, 0.001f);
                     timer.transform.localPosition = new Vector3(0, .9f, 0);
+                    // TODO: disable scoring?
                     break;
-                case 1: // ring around
-                    timer = GameObject.Instantiate<GameObject>(timerAsset, healthCrystal);
-                    timer.GetComponent<UIRingTimer>().Init(__instance.DieTime);
-                    timer.transform.localScale = new Vector2(0.0035f, 0.0035f);
-                    timer.transform.localPosition = Vector3.zero;
-                    break;
-                case 2: // flashing crystal
+                case HealthExpireIndicationType.Flashing: // flashing crystal
                     var flicker = healthCrystal.gameObject.AddComponent<MeshRendererFlicker>();
-                    flicker.Init(.4f, 0.6f, __instance.DieTime - 3f);
+                    flicker.Init(.6f, .7f, __instance.DieTime - 3);
                     break;
             }
         }
