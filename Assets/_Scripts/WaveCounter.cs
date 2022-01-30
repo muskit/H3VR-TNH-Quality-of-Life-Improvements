@@ -1,54 +1,38 @@
-﻿using System.Reflection;
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.UI;
 using FistVR;
 
 namespace TNHQoLImprovements
 {
-	public static class WavePatch
-    {
-		public static void Patch(Harmony harmony)
-        {
-			var original = typeof(TNH_Manager).GetMethod("HoldPointStarted", BindingFlags.Public | BindingFlags.Instance);
-			var patch = typeof(WavePatch).GetMethod("OnHoldStart", BindingFlags.NonPublic | BindingFlags.Static);
-			harmony.Patch(original, postfix: new HarmonyMethod(patch));
-        }
-
-		private static void OnHoldStart(TNH_HoldPoint p)
-        {
-			WaveCounter.WaveStarted.Invoke(p);
-        }
-    }
-
     public class WaveCounter : MonoBehaviour
 	{
-		[System.Serializable]
-		public class WaveStartedEvent : UnityEvent<TNH_HoldPoint> { }
-		public static WaveStartedEvent WaveStarted = new WaveStartedEvent();
+        private TNH_HoldPoint curHoldPoint;
+        private Traverse<int> trCurPhaseIdx;
+        private Traverse<int> trMaxPhases;
 
-		private bool initialized = false;
-
-		private TNH_HoldPoint holdPoint;
+        private Text text;
 
 		// Use this for initialization
 		void Start()
 		{
-
-		}
-
-		void Init(TNH_Manager manager)
-		{
-			holdPoint = manager.m_curHoldPoint;
-
-			initialized = true;
-		}
+            text = transform.GetChild(1).GetComponent<Text>();
+        }
 
 		// Update is called once per frame
 		void Update()
 		{
-			if (!initialized)
-				return;
-		}
+            if (InPlay.tnhManager.Phase != TNH_Phase.Hold)
+                return;
+
+            if(!ReferenceEquals(curHoldPoint, InPlay.tnhManager.m_curHoldPoint))
+            {
+                Debug.Log("Hold point updated!");
+                curHoldPoint = InPlay.tnhManager.m_curHoldPoint;
+                trCurPhaseIdx = Traverse.Create(curHoldPoint).Field<int>("m_phaseIndex");
+                trMaxPhases = Traverse.Create(curHoldPoint).Field<int>("m_maxPhases");
+            }
+            text.text = string.Format("{0} / {1}", trCurPhaseIdx.Value, trMaxPhases.Value);
+        }
 	}
 }

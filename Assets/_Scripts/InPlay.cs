@@ -16,6 +16,15 @@ namespace TNHQoLImprovements
 		private static Transform[] hands;
 		private static GameObject tnhInfo;
 
+        public static bool InHold()
+        {
+            if (tnhManager == null)
+                return false;
+
+            return tnhManager.Phase == TNH_Phase.Hold;
+        }
+
+        // Bring extra info into game over
 		public static void Patch(Harmony harmony)
         {
 			var original = typeof(TNH_Manager).GetMethod("SetPhase", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -38,7 +47,6 @@ namespace TNHQoLImprovements
 			}
 		}
 
-		// Use this for initialization
 		void Start()
 		{
 			tnhManager = GameObject.Find("_GameManager").GetComponent<TNH_Manager>();

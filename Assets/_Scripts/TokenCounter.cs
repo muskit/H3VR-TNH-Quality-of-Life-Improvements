@@ -7,9 +7,12 @@ namespace TNHQoLImprovements
 {
 	public class TokenCounter : MonoBehaviour
 	{
+        private Text text;
+
 		void Start()
 		{
-            transform.localPosition = new Vector3(333, 0, -450);
+            text = transform.GetChild(1).GetComponent<Text>();
+            text.font = MeatKitPlugin.fontAgencyFB;
 
             StartCoroutine(SetTokenImage());
 		}
@@ -18,7 +21,7 @@ namespace TNHQoLImprovements
         {
 			int debug_iterations = 0;
 			Sprite tokenSprite = null;
-			while (tokenSprite == null)  // END: loop until Token sprite is found
+			while (tokenSprite == null)  // loop until Token sprite is found
 			{
 				var obj = GameObject.Find("_TNH_ObjectConstructor(Clone)/_CanvasHolder/_UITest_Canvas/Icon_0/Cost_1/Image");
 				if (obj != null)
@@ -38,7 +41,7 @@ namespace TNHQoLImprovements
 		void Update()
 		{
 			int tokens = InPlay.tnhManager.GetNumTokens();
-			transform.GetChild(1).GetComponent<Text>().text = tokens.ToString();
+			text.text = tokens.ToString();
 		}
 	}
 }

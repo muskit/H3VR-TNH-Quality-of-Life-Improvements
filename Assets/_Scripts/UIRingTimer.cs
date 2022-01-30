@@ -29,5 +29,7 @@ public class UIRingTimer : MonoBehaviour {
 
 		float amount = (endTime - Time.time) / length;
 		ringImg.fillAmount = Mathf.Clamp01(amount);
+
+        transform.LookAt(MeatKitPlugin.playerCamera.transform);
 	}
 }

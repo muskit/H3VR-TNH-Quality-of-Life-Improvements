@@ -1,19 +1,30 @@
 # TNH Quality of Life Improvements
-This mod adds quality of life improvements to the *Take and Hold* experience.
+Ever got frustrated checking your HP against a bright ceiling in TNH?  
+Have you forgotten how many Holds you're playing for, so you don't know if you should spend all your tokens?  
+And... wait, which hold are you on again?  
+**This mod adds quality of life improvements to the *Take and Hold* experience that help with these questions, and then some.**
 
 ## Features
-* Better Health counter visibility
-* Token and hold counter on wrist
+* Better health counter visibility
+* Token, hold, and wave counter on radar hand
 * Player count for online leaderboards; see how you stack up!
   * Won't work with [*TakeAndHoldTweaker*](https://h3vr.thunderstore.io/package/devyndamonster/TakeAndHoldTweaker/) installed
+* Numerical representation of tokens at item stations
+* Expiration indication for health crystals (configurable to multiple types)
+* ...and possibly more!
 
-Enable/disable these features in your mod manager's *Config editor*.
+Toggle and customize these features in your mod manager's *Config editor*.
 
 For any issues/ideas, please create an issue on the GitHub repo (linked on Thunderstore page).
 
 ## Changelog
 1.1.0
-* Added Health Crystals expiration indicator
+* [TNH] Added win/lose count on hold counter
+* [TNH] Added enemy waves counter (substitutes token counter during hold if enabled)
+* [TNH] Added token numerical representation to shop
+* [TNH] Extra info from this mod now shows in game over
+* Added expiration indicators to Health Crystals
+* Health readability now applies outside of Take and Hold
 
 1.0.1
 * Fixed the in-play improvements only applying to Classic Hallways map (whoops!!)

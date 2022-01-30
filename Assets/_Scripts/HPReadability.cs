@@ -7,7 +7,6 @@ namespace TNHQoLImprovements
 	{
 		public static void ImproveHPTextReadability(GameObject gObjHUD)
 		{
-			Debug.Log("gObjHUD: " + gObjHUD);
 			var canvas = gObjHUD.GetComponent<Canvas>();
 			var gObjBG = new GameObject();
 			Transform[] tranHPText = {

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 05d48c500227c8a4bbb7c02e3ccbb0b3
-timeCreated: 1642730970
+guid: bd993af5e164abe478f9fb24772e9e5d
+timeCreated: 1643449316
 licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 4
@@ -9,9 +9,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Agency FB
+  fontName: Gewtymol
   fontNames:
-  - Agency FB
+  - Gewtymol
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

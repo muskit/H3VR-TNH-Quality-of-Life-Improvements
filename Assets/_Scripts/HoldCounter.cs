@@ -22,7 +22,8 @@ namespace TNHQoLImprovements
 		private Text lblWinLose;
 
 		public static int[] winLose = { -1, 1 };
-		public const string WIN_LOSE_TEXT = "<color=#10ff10>{0}</color>              <color=red>{1}</color>";
+		public const string WIN_LOSE_TEXT = "W: {0}           L: {1}";
+		//public const string WIN_LOSE_TEXT = "<color=#10ff10>{0}</color>              <color=red>{1}</color>";
 
 		public static void OnHoldEnd(TNH_HoldPoint p, bool success)
         {
@@ -34,10 +35,12 @@ namespace TNHQoLImprovements
 
 		void Start()
 		{
-			transform.localPosition = new Vector3(-333, 0, -450);
-
 			lblHoldCount = transform.GetChild(1).GetComponent<Text>();
 			lblWinLose = transform.GetChild(2).GetComponent<Text>();
+
+            transform.GetChild(0).GetComponent<Text>().font = MeatKitPlugin.fontAgencyFB;
+            lblHoldCount.font = MeatKitPlugin.fontAgencyFB;
+            lblWinLose.font = MeatKitPlugin.fontAgencyFB;
 
 			winLose[0]  = 0;
 			winLose[1]  = 0;
