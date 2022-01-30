@@ -27,20 +27,24 @@ namespace TNHQoLImprovements
 			if (initialized)
 				return;
 
-			this.scoreDisplay = tnhScore;
+            // don't run with TNHTweaker installed
+            this.gObjLoading = gObjLoading;
+            var loadedAssemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+            if (Array.Exists<Assembly>(loadedAssemblies, x => x.GetName().Name == "TakeAndHoldTweaker"))
+            {
+                tnhTweakerInstalled = true;
+                this.gObjLoading.transform.GetChild(0).GetComponent<Text>().text = "<color=lightblue><size=30>Online player count is incompatible with TNHTweaker.</size></color>";
+                this.gObjLoading.SetActive(true);
+                return;
+            }
+
+            this.scoreDisplay = tnhScore;
 			this.lblGlobalScores = scoreLabel;
 			this.lblGlobalScores.resizeTextForBestFit = true;
 			this.lblGlobalScores.horizontalOverflow = HorizontalWrapMode.Overflow;
-			this.gObjLoading = gObjLoading;
 			loadingStr = gObjLoading.GetComponentInChildren<Text>().text;
 
-			var loadedAssemblies = System.AppDomain.CurrentDomain.GetAssemblies();
-			if (Array.Exists<Assembly>(loadedAssemblies, x => x.GetName().Name == "TakeAndHoldTweaker"))
-			{
-				tnhTweakerInstalled = true;
-				this.gObjLoading.transform.GetChild(0).GetComponent<Text>().text = "<color=lightblue><size=30>Online player count is incompatible with TNHTweaker.</size></color>";
-				this.gObjLoading.SetActive(true);
-			}
+			
 
 			initialized = true;
 		}
@@ -78,7 +82,7 @@ namespace TNHQoLImprovements
             }
             catch (Exception e)
             {
-                gObjLoading.GetComponentInChildren<Text>().text = string.Format("<color=lightblue><size=30>Unknown error occured trying to retrieve online player count.</size></color>\n\n" +
+                gObjLoading.GetComponentInChildren<Text>().text = string.Format("<color=lightblue><size=30>Unknown error occured trying to retrieve online player count.</size></color>\n" +
 					"<color=red>{0}</color>", e);
                 gObjLoading.SetActive(true);
 			}

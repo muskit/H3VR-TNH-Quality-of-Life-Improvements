@@ -16,7 +16,9 @@ namespace TNHQoLImprovements
 		// Use this for initialization
 		void Start()
 		{
+            transform.GetChild(0).GetComponent<Text>().font = MeatKitPlugin.fontAgencyFB;
             text = transform.GetChild(1).GetComponent<Text>();
+            text.font = MeatKitPlugin.fontAgencyFB;
         }
 
 		// Update is called once per frame
@@ -27,7 +29,6 @@ namespace TNHQoLImprovements
 
             if(!ReferenceEquals(curHoldPoint, InPlay.tnhManager.m_curHoldPoint))
             {
-                Debug.Log("Hold point updated!");
                 curHoldPoint = InPlay.tnhManager.m_curHoldPoint;
                 trCurPhaseIdx = Traverse.Create(curHoldPoint).Field<int>("m_phaseIndex");
                 trMaxPhases = Traverse.Create(curHoldPoint).Field<int>("m_maxPhases");

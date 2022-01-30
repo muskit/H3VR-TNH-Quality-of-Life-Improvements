@@ -88,9 +88,16 @@ public class MeatKitPlugin : BaseUnityPlugin
                 HPReadability.ImproveHPTextReadability(healthCounter.transform.GetChild(0).gameObject);
         }
 
-        // grab Agency FB from game if it's not set
-        if(fontAgencyFB == null)
+        GetFonts();
+    }
+    
+    // called on scene change, find fonts from game if they're not set
+    private void GetFonts()
+    {
+        // Agency FB
+        if (fontAgencyFB == null)
         {
+            var healthCounter = FindObjectOfType<FistVR.FVRHealthBar>();
             if (healthCounter != null)
             {
                 fontAgencyFB = healthCounter.transform.GetChild(0).GetChild(0).GetComponent<Text>().font;
@@ -108,6 +115,7 @@ public class MeatKitPlugin : BaseUnityPlugin
                 }
             }
         }
+
     }
 
     public MeatKitPlugin(): base()

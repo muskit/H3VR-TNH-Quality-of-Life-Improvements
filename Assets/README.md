@@ -18,7 +18,10 @@ Toggle and customize these features in your mod manager's *Config editor*.
 For any issues/ideas, please create an issue on the GitHub repo (linked on Thunderstore page).
 
 ## Changelog
-1.1.0
+1.1.1
+* Fixed wave counter text not showing up during a hold
+
+**1.1.0**
 * [TNH] Added win/lose count on hold counter
 * [TNH] Added enemy waves counter (substitutes token counter during hold if enabled)
 * [TNH] Added token numerical representation to shop
@@ -34,7 +37,7 @@ For any issues/ideas, please create an issue on the GitHub repo (linked on Thund
 * Searching for the deprecated TNH Leaderboards Player Count mod to kill now stops after 120s
 
 
-1.0.0
+**1.0.0**
 * Initial release!
 
 **NOTE: [*TNH Leaderboard Player Count*](https://h3vr.thunderstore.io/package/muskit/TNH_Leaderboard_Player_Count/) has been merged with this mod. If installed, please remove that mod as it lacks features and is no longer supported.**
