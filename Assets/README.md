@@ -15,11 +15,13 @@ And... wait, which hold are you on again?
 
 Toggle and customize these features in your mod manager's *Config editor*.
 
-For any issues/ideas, please create an issue on the GitHub repo (linked on Thunderstore page).
+**This mod will not disqualify you from Steam or TNHTweaker leaderboards.**
+
+For any issues/ideas, please create an issue at the GitHub repository (linked on Thunderstore page).
 
 ## Changelog
 1.1.3
-* [TNH] Fixed wrist stats still trying to look at the camera in the game over area
+* [TNH] Fixed wrist stats still trying to look at the camera in the game over area, resulting in weird rotations
 
 1.1.2
 * [TNH] Wrist stats can now tilt towards the camera, making it less awkward to read

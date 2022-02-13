@@ -10,6 +10,9 @@ More visible HP counter<br/>
 Token and hold counter on wrist<br/>
 <img src=preview/stats.png>
 
+Numbered tokens at item stations<br/>
+<img src="preview/item station.png">
+
 Player count for online leaderboards (won't work w/ *TNHTweaker* installed)<br/>
 <img src=preview/leaderboard.png><br/>
 
