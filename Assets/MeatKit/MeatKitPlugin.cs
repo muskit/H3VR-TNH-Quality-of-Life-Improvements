@@ -48,6 +48,7 @@ public class MeatKitPlugin : BaseUnityPlugin
     public static ConfigEntry<float> cfgHPBackgroundOpacity;
     //--- Take and Hold Info ---//
     public static ConfigEntry<bool> cfgShowLPC;
+    public static ConfigEntry<bool> cfgInfoFollowCamera;
     public static ConfigEntry<bool> cfgShowTokens;
     public static ConfigEntry<bool> cfgShowHolds;
     public static ConfigEntry<bool> cfgShowNumbersAtShop;
@@ -135,7 +136,7 @@ public class MeatKitPlugin : BaseUnityPlugin
         bundle = AssetBundle.LoadFromFile(Path.Combine(BasePath, "tnh_qol_improvements"));
         SceneManager.activeSceneChanged += SceneChanged;
 
-        fontBombardier = MeatKitPlugin.bundle.LoadAsset<Font>("Bombardier");
+        fontBombardier = bundle.LoadAsset<Font>("Bombardier");
 
         // setup configuration
         //--- Health Counter ---//
@@ -153,9 +154,13 @@ public class MeatKitPlugin : BaseUnityPlugin
                                         "Set opacity of HP text to full and give it a shadow.");
         //--- Take and Hold Info ---//
         cfgShowLPC = Config.Bind("Take and Hold Info",
-                                 "Show player count in online leaderboards",
+                                 "Show Player Count in Online Leaderboards",
                                  true,
                                  "Shows the number of players in the currently selected TNH leaderboard.");
+        cfgInfoFollowCamera = Config.Bind("Take and Hold Info",
+                                          "Tilt Wrist Stats Towards Camera",
+                                          true,
+                                          "Tilt the extra wrist statistics from this mod towards the player's camera, allowing for easier readability.");
         cfgShowTokens = Config.Bind("Take and Hold Info",
                                     "Show Tokens",
                                     true,

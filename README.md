@@ -3,7 +3,7 @@ A *Hot Dogs, Horseshoes, and Hand Grenades* mod that adds quality of life improv
 
 Get it on [Thunderstore](https://h3vr.thunderstore.io/package/muskit/TNH_Quality_of_Life_Improvements/).
 
-## Features
+## Features (check Thunderstore for up-to-date list)
 More visible HP counter<br/>
 <img src=preview/hp.png>
 

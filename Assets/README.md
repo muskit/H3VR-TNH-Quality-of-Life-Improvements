@@ -18,6 +18,12 @@ Toggle and customize these features in your mod manager's *Config editor*.
 For any issues/ideas, please create an issue on the GitHub repo (linked on Thunderstore page).
 
 ## Changelog
+1.1.3
+* [TNH] Fixed wrist stats still trying to look at the camera in the game over area
+
+1.1.2
+* [TNH] Wrist stats can now tilt towards the camera, making it less awkward to read
+
 1.1.1
 * Fixed wave counter text not showing up during a hold
 

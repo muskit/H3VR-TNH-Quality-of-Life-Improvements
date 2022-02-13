@@ -42,7 +42,6 @@ namespace TNHQoLImprovements
 				int handSide = tnhManager.RadarHand == TNH_RadarHand.Left ? 0 : 1;
 
 				tnhInfo.transform.SetParent(hands[handSide], false);
-				tnhInfo.transform.localScale = new Vector3(.0002f, .0002f, .0002f);
 				tnhInfo.GetComponent<TNHInfo>().GameOverPos();
 			}
 		}

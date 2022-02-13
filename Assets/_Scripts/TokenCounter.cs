@@ -34,14 +34,14 @@ namespace TNHQoLImprovements
 					yield return new WaitForEndOfFrame();
 				}
 			}
-			Debug.Log("Token sprite found after " + debug_iterations.ToString() + " iterations.");
+			//Debug.Log("Token sprite found after " + debug_iterations.ToString() + " iterations.");
 			transform.GetChild(0).GetComponent<Image>().sprite = tokenSprite;
 		}
 
 		void Update()
 		{
-			int tokens = InPlay.tnhManager.GetNumTokens();
-			text.text = tokens.ToString();
+            int tokens = InPlay.tnhManager.GetNumTokens();
+            text.text = tokens.ToString();
 		}
 	}
 }
