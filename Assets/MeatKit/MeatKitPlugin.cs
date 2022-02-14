@@ -43,9 +43,10 @@ public class MeatKitPlugin : BaseUnityPlugin
 
     // BepInEx configuration
     //--- Health Counter ---//
-    public static ConfigEntry<bool> cfgSolidifyHPText;
+    public static ConfigEntry<bool> cfgHPHiddenWhenAiming;
     public static ConfigEntry<bool> cfgShowHPBackground;
     public static ConfigEntry<float> cfgHPBackgroundOpacity;
+    public static ConfigEntry<HPTextType> cfgHPTextType;
     //--- Take and Hold Info ---//
     public static ConfigEntry<bool> cfgShowLPC;
     public static ConfigEntry<bool> cfgInfoFollowCamera;
@@ -68,6 +69,20 @@ public class MeatKitPlugin : BaseUnityPlugin
 
     private void SceneChanged(Scene from, Scene to)
     {
+        GetFonts();
+        playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
+
+        // apply health counter tweaks globally
+        var healthCounter = FindObjectOfType<FistVR.FVRHealthBar>();
+        if (healthCounter != null)
+        {
+            HPReadability.ImproveHPTextReadability(healthCounter.transform.GetChild(0).gameObject);
+
+            if (cfgHPHiddenWhenAiming.Value)
+                healthCounter.gameObject.AddComponent<HPHideWhenAiming>();
+        }
+
+        // TNH patches
         if (GameObject.Find("_GameManager") != null || FindObjectOfType<FistVR.TNH_Manager>() != null)
         {
             Logger.LogInfo("We are in a TNH game!");
@@ -78,18 +93,6 @@ public class MeatKitPlugin : BaseUnityPlugin
             Logger.LogInfo("We are NOT in a TNH game!");
             Destroy(instance);
         }
-
-        playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
-
-        // apply health readability globally
-        var healthCounter = FindObjectOfType<FistVR.FVRHealthBar>();
-        if (healthCounter != null)
-        {
-            if (cfgShowHPBackground.Value || cfgSolidifyHPText.Value)
-                HPReadability.ImproveHPTextReadability(healthCounter.transform.GetChild(0).gameObject);
-        }
-
-        GetFonts();
     }
     
     // called on scene change, find fonts from game if they're not set
@@ -140,6 +143,10 @@ public class MeatKitPlugin : BaseUnityPlugin
 
         // setup configuration
         //--- Health Counter ---//
+        cfgHPHiddenWhenAiming = Config.Bind("Health Counter",
+                                            "Hide HP Counter When Aiming",
+                                            true,
+                                            "While aiming around the health counter in view, hide it.");
         cfgShowHPBackground = Config.Bind("Health Counter",
                                           "Background enabled",
                                           true,
@@ -148,10 +155,12 @@ public class MeatKitPlugin : BaseUnityPlugin
                                              "Background opacity",
                                              0.74f,
                                              "Set opacity of health text's background (if enabled).");
-        cfgSolidifyHPText = Config.Bind("Health Counter",
-                                        "Solidify HP text",
-                                        true,
-                                        "Set opacity of HP text to full and give it a shadow.");
+        cfgHPTextType = Config.Bind("Health Counter",
+                                    "HP Text Type",
+                                    HPTextType.Solidify,
+                                    "Solidify: Set text to full opacity and give it a drop shadow\n" +
+                                    "Untouched: Leave text untouched\n" +
+                                    "Hidden: Hide health counter completely (will hide background if enabled)");
         //--- Take and Hold Info ---//
         cfgShowLPC = Config.Bind("Take and Hold Info",
                                  "Show Player Count in Online Leaderboards",

@@ -20,6 +20,11 @@ Toggle and customize these features in your mod manager's *Config editor*.
 For any issues/ideas, please create an issue at the GitHub repository (linked on Thunderstore page).
 
 ## Changelog
+**1.2.0**
+* HP counter text can now be hidden completely
+* Added HP counter fading when pointing a firearm towards it, allowing better visiblity
+* Shrunk borders of health counter's background
+
 1.1.3
 * [TNH] Fixed wrist stats still trying to look at the camera in the game over area, resulting in weird rotations
 

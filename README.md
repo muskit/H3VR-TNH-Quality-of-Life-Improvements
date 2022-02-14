@@ -7,8 +7,11 @@ Get it on [Thunderstore](https://h3vr.thunderstore.io/package/muskit/TNH_Quality
 More visible HP counter<br/>
 <img src=preview/hp.png>
 
-Token and hold counter on wrist<br/>
-<img src=preview/stats.png>
+Fading HP counter when aiming around it<br/>
+<img src=preview/aimhide.png>
+
+Useful contextual game stats on radar hand<br/>
+<img src=preview/stats_new.png>
 
 Numbered tokens at item stations<br/>
 <img src="preview/item station.png">
