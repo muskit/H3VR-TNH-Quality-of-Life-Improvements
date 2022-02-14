@@ -22,7 +22,7 @@ For any issues/ideas, please create an issue at the GitHub repository (linked on
 
 ## Changelog
 1.2.1
-* Changed leaderboard player count message for unavailability with TNHTweaker
+* [TNH] Changed leaderboard player count message for unavailability with TNHTweaker
 
 **1.2.0**
 * HP counter text can now be hidden completely
