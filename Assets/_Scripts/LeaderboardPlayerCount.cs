@@ -33,7 +33,7 @@ namespace TNHQoLImprovements
             if (Array.Exists<Assembly>(loadedAssemblies, x => x.GetName().Name == "TakeAndHoldTweaker"))
             {
                 tnhTweakerInstalled = true;
-                this.gObjLoading.transform.GetChild(0).GetComponent<Text>().text = "<color=lightblue><size=30>Online player count is incompatible with TNHTweaker.</size></color>";
+                this.gObjLoading.transform.GetChild(0).GetComponent<Text>().text = "<color=lightblue><size=30>Online leaderboards player count unavailable for TNHTweaker.</size></color>";
                 this.gObjLoading.SetActive(true);
                 return;
             }

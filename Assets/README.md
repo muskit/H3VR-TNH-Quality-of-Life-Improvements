@@ -6,6 +6,7 @@ And... wait, which hold are you on again?
 
 ## Features
 * Better health counter visibility
+* Health counter fade when aiming around it
 * Token, hold, and wave counter on radar hand
 * Player count for online leaderboards; see how you stack up!
   * Won't work with [*TakeAndHoldTweaker*](https://h3vr.thunderstore.io/package/devyndamonster/TakeAndHoldTweaker/) installed
@@ -20,6 +21,9 @@ Toggle and customize these features in your mod manager's *Config editor*.
 For any issues/ideas, please create an issue at the GitHub repository (linked on Thunderstore page).
 
 ## Changelog
+1.2.1
+* Changed leaderboard player count message for unavailability with TNHTweaker
+
 **1.2.0**
 * HP counter text can now be hidden completely
 * Added HP counter fading when pointing a firearm towards it, allowing better visiblity
