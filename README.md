@@ -21,4 +21,4 @@ Player count for online leaderboards (won't work w/ *TNHTweaker* installed)<br/>
 
 Features are modifiable via the mod manager's *Config editor*.
 
-**NOTE: [*TNH Leaderboard Player Count*](https://github.com/muskit/TNH-Leaderboard-Player-Count/) has been merged with this mod.**
+**This mod is built on [MeatKit](https://github.com/H3VR-Modding/MeatKit).**
