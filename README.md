@@ -7,7 +7,7 @@ Get it on [Thunderstore](https://h3vr.thunderstore.io/package/muskit/TNH_Quality
 More visible HP counter<br/>
 <img src=preview/hp.png>
 
-Fading HP counter when aiming around it<br/>
+Less visible HP counter when aiming around it<br/>
 <img src=preview/aimhide.png>
 
 Useful contextual game stats on radar hand<br/>
