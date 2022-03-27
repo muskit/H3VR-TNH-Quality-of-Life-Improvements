@@ -14,7 +14,9 @@ namespace TNHQoLImprovements
 		private float beginTime;
 		private float onLength;
 		private float offLength;
+
 		private float stateChangeTime = 0;
+        private float flashQuicklyAfter;
 		private bool visible = true;
 
 		private MeshRenderer mesh;
@@ -24,11 +26,19 @@ namespace TNHQoLImprovements
 			mesh = GetComponent<MeshRenderer>();
 		}
 
-		public void Init(float interval, float onToOffRatio = 0.5f,  float beginAfter = 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="interval">How long an off-on cycle lasts.</param>
+        /// <param name="onToOffRatio">On-time to off-time ratio for the flashing sequence.</param>
+        /// <param name="beginAfter">Postpone the flashing time.</param>
+        /// <param name="flashQuicklyAfter">Once flashing starts, how long until it flashes very quickly.</param>
+		public void Init(float interval, float onToOffRatio = 0.5f,  float beginAfter = 0, float flashQuicklyAfter = -1)
         {
 			beginTime = Time.time + beginAfter;
 			onLength = interval * onToOffRatio;
 			offLength = interval * (1 - onToOffRatio);
+            this.flashQuicklyAfter = flashQuicklyAfter;
 			
 			initialized = true;
         }
@@ -52,13 +62,6 @@ namespace TNHQoLImprovements
 					stateChangeTime = Time.time + offLength;
 				}
 			}
-
-			//if (Time.time >= stateChangeTime)
-   //         {
-			//	stateChangeTime = Time.time + interval;
-			//	visible = !visible;
-			//	mesh.enabled = visible;
-   //         }
 		}
 	}
 }

@@ -44,6 +44,7 @@ public class MeatKitPlugin : BaseUnityPlugin
     // BepInEx configuration
     //--- Health Counter ---//
     public static ConfigEntry<bool> cfgHPHiddenWhenAiming;
+    public static ConfigEntry<float> cfgHPAimOpacity;
     public static ConfigEntry<bool> cfgShowHPBackground;
     public static ConfigEntry<float> cfgHPBackgroundOpacity;
     public static ConfigEntry<HPTextType> cfgHPTextType;
@@ -62,7 +63,7 @@ public class MeatKitPlugin : BaseUnityPlugin
     private static InPlay instance;
     
     // Searching for old leaderboards player count mod to disable
-    private bool lpcModGone = false;
+    private bool lpcStopSearching = false;
     private float lpcModSearchTimeEnd;
 
     private Harmony harmony;
@@ -147,10 +148,14 @@ public class MeatKitPlugin : BaseUnityPlugin
                                             "Hide HP Counter When Aiming",
                                             true,
                                             "While aiming around the health counter in view, hide it.");
+        cfgHPAimOpacity = cfgHPBackgroundOpacity = Config.Bind("Health Counter",
+                          "Aiming opacity",
+                          0f,
+                          "Opacity of Health Counter when aiming around it (if Hide HP is enabled).");
         cfgShowHPBackground = Config.Bind("Health Counter",
                                           "Background enabled",
-                                          true,
-                                          "Apply a background to the health text.");
+                                          false,
+                                          "Apply a background to the Health Counter.");
         cfgHPBackgroundOpacity = Config.Bind("Health Counter",
                                              "Background opacity",
                                              0.74f,
@@ -196,8 +201,8 @@ public class MeatKitPlugin : BaseUnityPlugin
                                                 HealthExpireIndicationType.Flashing,
                                                 "Add a visual indication on the Health Crystal's despawn timer.");
 
-        // give 120 seconds to search for old mod, which we want to kill
-        lpcModSearchTimeEnd = Time.time + 120;
+        // give 60 seconds to search for old mod, which we want to kill
+        lpcModSearchTimeEnd = Time.time + 60;
 
         RunPatches();
     }
@@ -240,7 +245,7 @@ public class MeatKitPlugin : BaseUnityPlugin
     /// </summary>
     private void Update()
     {
-        if (lpcModGone)
+        if (lpcStopSearching)
             return;
 
         foreach (var plugin in Chainloader.PluginInfos)
@@ -249,14 +254,14 @@ public class MeatKitPlugin : BaseUnityPlugin
             {
                 Logger.LogWarning("TNH Leaderboard Player Count mod detected. Destroying it to avoid interference.");
                 Destroy(plugin.Value.Instance);
-                lpcModGone = true;
+                lpcStopSearching = true;
             }
         }
 
         if (Time.realtimeSinceStartup >= lpcModSearchTimeEnd)
         {
-            Logger.LogInfo("Stopping search for TNH Leaderboard Player Count mod after 120 seconds.");
-            lpcModGone = true;
+            Logger.LogInfo("Stopping search for TNH Leaderboard Player Count mod after 60 seconds.");
+            lpcStopSearching = true;
         }
     }
 }

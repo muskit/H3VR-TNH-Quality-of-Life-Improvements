@@ -38,7 +38,7 @@ public class HPHideWhenAiming : MonoBehaviour {
         hudCollider = gObjHUD.AddComponent<BoxCollider>();
         hudCollider.isTrigger = true;
         hudCollider.gameObject.layer = LayerMask.NameToLayer("UI");
-        hudCollider.size = new Vector3(40, 25, .01f);
+        hudCollider.size = new Vector3(50, 30, .01f);
 
         //// TESTING: collider visuals
         //gObjColliderRenderer = new GameObject();
@@ -97,7 +97,7 @@ public class HPHideWhenAiming : MonoBehaviour {
 
         if (rayHit)
         {
-            canvasGroup.alpha = 0.1f;
+            canvasGroup.alpha = MeatKitPlugin.cfgHPAimOpacity.Value;
             if (background != null)
                 background.enabled = false;
         }
