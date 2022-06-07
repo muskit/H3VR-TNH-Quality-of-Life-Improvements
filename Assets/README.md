@@ -21,6 +21,15 @@ Toggle and customize these features in your mod manager's *Config editor*.
 For any issues/ideas, please create an issue at the GitHub repository (linked on Thunderstore page).
 
 ## Changelog
+1.2.3
+* Added button in wrist menu to toggle HP counter (thanks PutterMyBancakes for the suggestion!)
+* [TNH] Made the search time for deprecated Leaderboard mod based on day of year as an input of the sin()
+
+1.2.2
+* When aiming around the HP counter, its opacity can now change to a player setting
+* Increased size of hide-HP aiming region
+* [TNH] Decreased search time for deprecated Leaderboard mod
+
 1.2.1
 * [TNH] Changed leaderboard player count message for unavailability with TNHTweaker
 

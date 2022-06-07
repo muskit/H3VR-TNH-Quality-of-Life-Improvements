@@ -48,7 +48,7 @@ namespace TNHQoLImprovements
 
 		void Start()
 		{
-			tnhManager = GameObject.Find("_GameManager").GetComponent<TNH_Manager>();
+			tnhManager = FindObjectOfType<TNH_Manager>();
 
 			var rig = Object.FindObjectOfType<FVRMovementManager>().transform;
 			hands = new Transform[] {

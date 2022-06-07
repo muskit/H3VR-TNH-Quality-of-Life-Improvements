@@ -13,18 +13,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PackageName: TNH_Quality_of_Life_Improvements
   Author: muskit
-  Version: 1.2.2
+  Version: 1.2.3
   Icon: {fileID: 2800000, guid: 785b7946398f5314b95bf593d2d77d67, type: 3}
   ReadMe: {fileID: 102900000, guid: ab1d6dea017447a48ac348db588a6f35, type: 3}
   WebsiteURL: https://github.com/muskit/TNH-Quality-of-Life-Improvements
   Description: Quality of life improvements to the Take and Hold experience.
   AdditionalDependencies:
   - BepInEx-BepInExPack_H3VR-5.4.1700
+  - nrgill28-Sodalite-1.3.5
   StripNamespaces: 0
   AdditionalNamespaces:
   - TNHQoLImprovements
   BuildItems:
   - {fileID: 11400000, guid: ccaff18373cd99848b344316974e6d46, type: 2}
   BundleCompressionType: 2
-  BuildAction: 2
-  OutputProfile: 
+  BuildAction: 1
+  OutputProfile: C:/Users/Alex/AppData/Roaming/r2modmanPlus-local/H3VR/profiles/dev

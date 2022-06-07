@@ -9,7 +9,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using FistVR;
 using TNHQoLImprovements;
+using Sodalite.Api;
+using Sodalite;
 
 /*
  * SUPER LARGE WARNING ABOUT THIS CLASS
@@ -61,10 +64,16 @@ public class MeatKitPlugin : BaseUnityPlugin
 
     // Take and Hold modifications
     private static InPlay instance;
-    
+
     // Searching for old leaderboards player count mod to disable
+    private float lpcSearchTime;
     private bool lpcStopSearching = false;
     private float lpcModSearchTimeEnd;
+
+    // toggle HP visibility from wrist menu
+    private bool hpDisplayEnabled = true;
+    public static FVRHealthBar hpDisplay;
+    private WristMenuButton wmbHPToggle;
 
     private Harmony harmony;
 
@@ -74,17 +83,23 @@ public class MeatKitPlugin : BaseUnityPlugin
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
 
         // apply health counter tweaks globally
-        var healthCounter = FindObjectOfType<FistVR.FVRHealthBar>();
-        if (healthCounter != null)
+        hpDisplay = FindObjectOfType<FVRHealthBar>();
+        if (hpDisplay != null)
         {
-            HPReadability.ImproveHPTextReadability(healthCounter.transform.GetChild(0).gameObject);
+            HPReadability.ImproveHPTextReadability(hpDisplay.transform.GetChild(0).gameObject);
 
             if (cfgHPHiddenWhenAiming.Value)
-                healthCounter.gameObject.AddComponent<HPHideWhenAiming>();
+                hpDisplay.gameObject.AddComponent<HPHideWhenAiming>();
+
+            WristMenuAPI.Buttons.Add(wmbHPToggle);
+        }
+        else
+        {
+            WristMenuAPI.Buttons.Remove(wmbHPToggle);
         }
 
         // TNH patches
-        if (GameObject.Find("_GameManager") != null || FindObjectOfType<FistVR.TNH_Manager>() != null)
+        if (GameObject.Find("_GameManager") != null || FindObjectOfType<TNH_Manager>() != null)
         {
             Logger.LogInfo("We are in a TNH game!");
             instance = new GameObject().AddComponent<InPlay>();
@@ -102,7 +117,7 @@ public class MeatKitPlugin : BaseUnityPlugin
         // Agency FB
         if (fontAgencyFB == null)
         {
-            var healthCounter = FindObjectOfType<FistVR.FVRHealthBar>();
+            var healthCounter = FindObjectOfType<FVRHealthBar>();
             if (healthCounter != null)
             {
                 fontAgencyFB = healthCounter.transform.GetChild(0).GetChild(0).GetComponent<Text>().font;
@@ -126,6 +141,7 @@ public class MeatKitPlugin : BaseUnityPlugin
     public MeatKitPlugin(): base()
     {
         harmony = new Harmony("muskit.TNHQualityOfLifeImprovements");
+        lpcSearchTime = 30 + 30 * Mathf.Sin(System.DateTime.Today.DayOfYear / 365);
     }
 
     private void Awake()
@@ -201,11 +217,14 @@ public class MeatKitPlugin : BaseUnityPlugin
                                                 HealthExpireIndicationType.Flashing,
                                                 "Add a visual indication on the Health Crystal's despawn timer.");
 
-        // give 60 seconds to search for old mod, which we want to kill
-        lpcModSearchTimeEnd = Time.time + 60;
+        // calculate end time to search for my deprecated Leaderboard
+        lpcModSearchTimeEnd = Time.time + lpcSearchTime;
+
+        wmbHPToggle = new WristMenuButton("Toggle HP Display", ToggleHPVisibility);
 
         RunPatches();
     }
+
     // DO NOT EDIT.
     private void LoadAssets() {}
 
@@ -240,6 +259,13 @@ public class MeatKitPlugin : BaseUnityPlugin
         }
     }
 
+    private void ToggleHPVisibility(object sender, ButtonClickEventArgs args)
+    {
+        hpDisplayEnabled = !hpDisplayEnabled;
+        if (hpDisplay != null)
+            hpDisplay.gameObject.SetActive(hpDisplayEnabled);
+    }
+
     /// <summary>
     /// Its only purpose: to kill the deprecated TNH Leaderboard Player Count mod.
     /// </summary>
@@ -260,7 +286,7 @@ public class MeatKitPlugin : BaseUnityPlugin
 
         if (Time.realtimeSinceStartup >= lpcModSearchTimeEnd)
         {
-            Logger.LogInfo("Stopping search for TNH Leaderboard Player Count mod after 60 seconds.");
+            Logger.LogInfo(string.Format("Stopping search for TNH Leaderboard Player Count mod after {0} seconds.", lpcSearchTime));
             lpcStopSearching = true;
         }
     }
