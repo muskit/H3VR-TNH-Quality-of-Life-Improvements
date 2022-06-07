@@ -70,20 +70,21 @@ public class MeatKitPlugin : BaseUnityPlugin
     private bool lpcStopSearching = false;
     private float lpcModSearchTimeEnd;
 
+    public static FVRHealthBar hpDisplay;
+    
     // toggle HP visibility from wrist menu
     private bool hpDisplayEnabled = true;
-    public static FVRHealthBar hpDisplay;
     private WristMenuButton wmbHPToggle;
 
     private Harmony harmony;
 
     private void SceneChanged(Scene from, Scene to)
     {
-        GetFonts();
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        hpDisplay = FindObjectOfType<FVRHealthBar>();
+        GetFonts();
 
         // apply health counter tweaks globally
-        hpDisplay = FindObjectOfType<FVRHealthBar>();
         if (hpDisplay != null)
         {
             HPReadability.ImproveHPTextReadability(hpDisplay.transform.GetChild(0).gameObject);
@@ -117,10 +118,9 @@ public class MeatKitPlugin : BaseUnityPlugin
         // Agency FB
         if (fontAgencyFB == null)
         {
-            var healthCounter = FindObjectOfType<FVRHealthBar>();
-            if (healthCounter != null)
+            if (hpDisplay != null)
             {
-                fontAgencyFB = healthCounter.transform.GetChild(0).GetChild(0).GetComponent<Text>().font;
+                fontAgencyFB = hpDisplay.transform.GetChild(0).GetChild(0).GetComponent<Text>().font;
             }
             else
             {
@@ -135,13 +135,12 @@ public class MeatKitPlugin : BaseUnityPlugin
                 }
             }
         }
-
     }
 
     public MeatKitPlugin(): base()
     {
         harmony = new Harmony("muskit.TNHQualityOfLifeImprovements");
-        lpcSearchTime = 30 + 30 * Mathf.Sin(System.DateTime.Today.DayOfYear / 365);
+        lpcSearchTime = 30f + 30f * Mathf.Sin(System.DateTime.Today.DayOfYear / 365f);
     }
 
     private void Awake()
@@ -149,7 +148,7 @@ public class MeatKitPlugin : BaseUnityPlugin
         // MeatKit requirement
         LoadAssets();
 
-        // get Agency FB from system (BAD IDEA, NOT EVERYONE WILL HAVE IT)
+        // get Agency FB from system (BAD IDEA, NOT EVERYONE WILL HAVE IT; MAY SET TO DEFAULT FONT)
         //fontAgencyFB = Font.CreateDynamicFontFromOSFont("Agency FB", 16);
 
         // load asset bundle
@@ -231,7 +230,10 @@ public class MeatKitPlugin : BaseUnityPlugin
     private void RunPatches()
     {
         if (harmony == null)
+        {
+            Logger.LogError("Could not run patches; Harmony didn't initialize correctly!");
             return;
+        }
 
         // patch KillAll code (only acts w/ health crystals)
         if (cfgHealthCrystalIndicator.Value != HealthExpireIndicationType.None)
