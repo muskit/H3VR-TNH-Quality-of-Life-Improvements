@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.IO;
-using AssetsTools.NET;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -9,7 +7,7 @@ namespace MeatKit
 {
     public static partial class MeatKit
     {
-        private static readonly string ManagedDirectory = Path.Combine(Application.dataPath, "MeatKit/Managed/");
+        private static readonly string ManagedDirectory = Path.Combine(Application.dataPath, "Managed/");
 
         private static bool ShowErrorIfH3VRNotImported()
         {
@@ -28,13 +26,35 @@ namespace MeatKit
             var gameManagedLocation = MeatKitCache.GameManagedLocation;
             if (string.IsNullOrEmpty(gameManagedLocation) || !Directory.Exists(gameManagedLocation))
             {
-                gameManagedLocation = EditorUtility.OpenFolderPanel("Select H3VR Managed directory", string.Empty, "Managed");
-                MeatKitCache.GameManagedLocation = gameManagedLocation;
+                // Cache wasn't set or directory doesn't exist. Lets see if we can find it automatically via Steam
+                gameManagedLocation = SteamAppLocator.LocateGame();
+                if (string.IsNullOrEmpty(gameManagedLocation))
+                {
+                    // Still nope. Ask the user for it directly.
+                    gameManagedLocation =
+                        EditorUtility.OpenFolderPanel("Select H3VR Managed directory", string.Empty, "Managed");
+                }
+                else gameManagedLocation = Path.Combine(gameManagedLocation, "h3vr_Data/Managed");
             }
 
-            // If it's _still_ empty, the user must have cancelled.
+            // If it's _still_ empty, the user must have cancelled the input prompt, so cancel the import.
             if (string.IsNullOrEmpty(gameManagedLocation)) return;
+
+            // Also, check if the path is even valid
+            if (!File.Exists(Path.Combine(gameManagedLocation, "Assembly-CSharp.dll")))
+            {
+                EditorUtility.DisplayDialog("Error",
+                    "Looks like the path you selected is invalid. Make sure you are selecting the h3vr_Data/Managed folder in the game directory.",
+                    "Ok");
+                return;
+            }
+            
+            // Import the assemblies and update the cache so we can find it in the future
             ImportAssemblies(gameManagedLocation, ManagedDirectory);
+            MeatKitCache.GameManagedLocation = gameManagedLocation;
+
+            // Let the user know we've completed the action
+            EditorUtility.DisplayDialog("Success", "Game scripts imported", "Ok");
         }
 
         [MenuItem("MeatKit/Scripts/Import Single", priority = 0)]
@@ -66,38 +86,10 @@ namespace MeatKit
         {
             // Make sure the scripts are imported and there are no errors before exporting
             if (ShowErrorIfH3VRNotImported()) return;
+            if (!BuildWindow.SelectedProfile) return;
+
             if (!BuildWindow.SelectedProfile.EnsureValidForEditor()) return;
-            ExportEditorAssembly(BundleOutputPath);
-        }
-
-
-        [MenuItem("MeatKit/Asset Bundle/Export", priority = 1)]
-        public static void ExportBundle()
-        {
-            var assetBundlePath = EditorUtility.OpenFilePanel("Select asset bundle", Application.dataPath, "");
-            var settings = BuildWindow.SelectedProfile;
-            var replaceMap = new Dictionary<string, string>
-            {
-                {"Assembly-CSharp.dll", settings.PackageName + ".dll"},
-                {"Assembly-CSharp-firstpass.dll", settings.PackageName + "-firstpass.dll"},
-                {"H3VRCode-CSharp.dll", "Assembly-CSharp.dll"},
-                {"H3VRCode-CSharp-firstpass.dll", "Assembly-CSharp-firstpass.dll"}
-            };
-
-            ProcessBundle(assetBundlePath, assetBundlePath, replaceMap, AssetBundleCompressionType.LZ4);
-        }
-
-        [MenuItem("MeatKit/Asset Bundle/Import", priority = 1)]
-        public static void ImportBundle()
-        {
-            var assetBundlePath = EditorUtility.OpenFilePanel("Select asset bundle", Application.dataPath, "");
-            var replaceMap = new Dictionary<string, string>
-            {
-                {"Assembly-CSharp.dll", "H3VRCode-CSharp.dll"},
-                {"Assembly-CSharp-firstpass.dll", "H3VRCode-CSharp-firstpass.dll"}
-            };
-
-            ProcessBundle(assetBundlePath, assetBundlePath + "-imported", replaceMap, AssetBundleCompressionType.NONE);
+            ExportEditorAssembly(BuildWindow.SelectedProfile.ExportPath);
         }
 
         public static void ClearCache()

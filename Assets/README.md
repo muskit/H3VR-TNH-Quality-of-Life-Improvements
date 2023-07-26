@@ -9,7 +9,7 @@ And... wait, which hold are you on again?
 * Health counter fade when aiming around it
 * Token, hold, and wave counter on radar hand
 * Player count for online leaderboards; see how you stack up!
-  * Won't work with [*TakeAndHoldTweaker*](https://h3vr.thunderstore.io/package/devyndamonster/TakeAndHoldTweaker/) installed
+  * Disabled if [*TakeAndHoldTweaker*](https://h3vr.thunderstore.io/package/devyndamonster/TakeAndHoldTweaker/) is installed
 * Numerical representation of tokens at item stations
 * Expiration indication for health crystals (configurable to multiple types)
 * ...and possibly more!
