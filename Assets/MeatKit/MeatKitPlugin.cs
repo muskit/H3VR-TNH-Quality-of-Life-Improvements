@@ -85,8 +85,24 @@ public static AssetBundle bundle;
 
     private void SceneChanged(Scene from, Scene to)
     {
-        playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        hpDisplay = FindObjectOfType<FVRHealthBar>();
+        StartCoroutine("SceneChangedCoRoutine");
+	}
+
+    private IEnumerator SceneChangedCoRoutine()
+    {
+        // grab H3VR objects
+		playerCamera = null;
+		hpDisplay = null;
+		while (playerCamera == null)
+        {
+            playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            hpDisplay = FindObjectOfType<FVRHealthBar>();
+			yield return null;
+		}
+
+        // ---- MAINCAMERA FOUND SIGNIFIES THAT ESSENTIAL GAME OBJECTS HAVE LOADED IN ---- //
+
+        // find Agency font
         GetFonts();
 
         // apply health counter tweaks globally
@@ -104,34 +120,17 @@ public static AssetBundle bundle;
             WristMenuAPI.Buttons.Remove(wmbHPToggle);
         }
 
-		StartCoroutine("TryTNH");
-	}
-
-    private IEnumerator TryTNH()
-    {
-        for (int i = 0; i < 11; ++i)
+        if (GameObject.Find("_GameManager") != null || FindObjectOfType<TNH_Manager>() != null)
         {
-			// TNH patches
-			if (GameObject.Find("_GameManager") != null || FindObjectOfType<TNH_Manager>() != null)
-			{
-				Logger.LogInfo("We are in a TNH game!");
-				instance = new GameObject().AddComponent<InPlay>();
-                break;
-			}
-			else
-			{
-				Logger.LogInfo(String.Format("Couldn't find a TNH game. Trying again...({0}/10)", i));
-				yield return new WaitForEndOfFrame();
-			}
+            Logger.LogInfo("We are in a TNH game!");
+            instance = new GameObject().AddComponent<InPlay>();
         }
-
-        // destroy self only if we are FOR SURE not in a TNH game
-        if (GameObject.Find("_GameManager") == null || FindObjectOfType<TNH_Manager>() == null)
+        else
         {
             Logger.LogInfo("We are NOT in a TNH game!");
             Destroy(instance);
         }
-    }
+	}
     
     // called on scene change, find fonts from game if they're not set
     private void GetFonts()
