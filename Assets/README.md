@@ -21,6 +21,13 @@ Toggle and customize these features in your mod manager's *Config editor*.
 For any issues/ideas, please create an issue at the GitHub repository (linked on Thunderstore page).
 
 ## Changelog
+1.2.5
+* [TNH] Change initialization approach to cover errors in both Atlas/WurstMod-based maps
+
+1.2.4
+* [TNH] Fix errors occurring in Atlas-based maps
+* Update MeatKit (now on Unity 5.6.7f1!)
+
 1.2.3
 * Added button in wrist menu to toggle HP counter (thanks PutterMyBancakes for the suggestion!)
 * [TNH] Made the search time for deprecated Leaderboard mod based on day of year as an input of the sin()
