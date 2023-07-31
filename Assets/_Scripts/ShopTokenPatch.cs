@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +26,7 @@ namespace TNHQoLImprovements
     {
         private Text text;
 
-        private IEnumerator Start()
+        private void Start()
         {
             var gObjText = new GameObject("TokenCounter");
             gObjText.transform.SetParent(transform, false);
@@ -38,26 +37,11 @@ namespace TNHQoLImprovements
             text.font = MeatKitPlugin.fontBombardier;
             text.fontSize = 55;
             text.color = new Color(0.1307786f, 0.2461715f, 0.359f);
-
-            while (InPlay.tnhManager == null)
-            {
-				Debug.Log("[ShopTokenNumber] tnhManager is null!");
-				yield return null;
-			}
-
-			InPlay.tnhManager.TokenCountChangeEvent += UpdateText;
-			UpdateText();
-		}
-
-        private void UpdateText(int _ = 0)
+        }
+        private void Update()
         {
             int tokens = InPlay.tnhManager.GetNumTokens();
             text.text = tokens.ToString();
         }
-
-        private void OnDestroy()
-        {
-			InPlay.tnhManager.TokenCountChangeEvent -= UpdateText;
-		}
     }
 }

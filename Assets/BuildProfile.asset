@@ -26,5 +26,5 @@ MonoBehaviour:
   ApplyHarmonyPatches: 1
   BuildItems:
   - {fileID: 11400000, guid: ccaff18373cd99848b344316974e6d46, type: 2}
-  BuildAction: 2
+  BuildAction: 1
   OutputProfile: C:/Users/Alex/AppData/Roaming/r2modmanPlus-local/H3VR/profiles/dev

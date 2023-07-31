@@ -58,10 +58,5 @@ namespace TNHQoLImprovements
 			tnhInfo = Instantiate<GameObject>(MeatKitPlugin.bundle.LoadAsset<GameObject>("TNHInfo"), FindObjectOfType<TAH_Reticle>().transform.GetChild(3));
 			tnhInfo.transform.localScale = new Vector3(0.002f, 0.002f, 0.002f);
 		}
-
-		void OnDestroy()
-		{
-			tnhManager = null;
-		}
 	}
 }
