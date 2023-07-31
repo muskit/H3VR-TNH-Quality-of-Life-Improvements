@@ -103,7 +103,7 @@ public static AssetBundle bundle;
 			}
 			else
 			{
-				Logger.LogInfo(String.Format("Couldn't find a TNH game. Trying again...({0}/10)", i));
+				Logger.LogInfo(String.Format("Couldn't find a TNH game. Trying again...({0}/10)", i+1));
 				yield return new WaitForEndOfFrame();
 			}
         }

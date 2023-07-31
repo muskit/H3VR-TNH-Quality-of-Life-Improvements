@@ -19,6 +19,6 @@ Numbered tokens at item stations<br/>
 Player count for online leaderboards (won't work w/ *TNHTweaker* installed)<br/>
 <img src=preview/leaderboard.png><br/>
 
-Features are modifiable via the mod manager's *Config editor*.
+Features are modifiable via your mod manager's *Config editor*.
 
 **This mod is built on [MeatKit](https://github.com/H3VR-Modding/MeatKit).**

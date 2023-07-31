@@ -10,14 +10,6 @@ namespace TNHQoLImprovements
 	{
 		public static TNH_Manager tnhManager;
 
-        public static bool InHold()
-        {
-            if (tnhManager == null)
-                return false;
-
-            return tnhManager.Phase == TNH_Phase.Hold;
-        }
-
 		void Start()
 		{
 			tnhManager = FindObjectOfType<TNH_Manager>();

@@ -5,8 +5,9 @@ And... wait, which hold are you on again?
 **This mod adds quality of life improvements to the *Take and Hold* experience that help with these questions, and then some.**
 
 ## Features
+* Health counter toggle
 * Better health counter visibility
-* Health counter fade when aiming around it
+* Health counter fade/hide when aiming around it
 * Token, hold, and wave counter on radar hand
 * Player count for online leaderboards; see how you stack up!
   * Disabled if [*TakeAndHoldTweaker*](https://h3vr.thunderstore.io/package/devyndamonster/TakeAndHoldTweaker/) is installed
