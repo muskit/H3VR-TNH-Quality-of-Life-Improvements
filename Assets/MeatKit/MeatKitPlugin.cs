@@ -68,7 +68,7 @@ public static AssetBundle bundle;
     public static ConfigEntry<HealthExpireIndicationType> cfgHealthCrystalIndicator;
 
     // Take and Hold modifications
-    private static InPlay instance;
+    private static InPlay playInstance;
 
     // Searching for old leaderboards player count mod to disable
     private float lpcSearchTime;
@@ -83,21 +83,40 @@ public static AssetBundle bundle;
 
     private Harmony harmony;
 
-    // Could soft-lock if we're not in TNH!
-    public static IEnumerator WaitForTNHInit()
-    {
-        while (InPlay.tnhManager == null || FindObjectOfType<TNH_Manager>() == null)
-        {
-            yield return null;
-        }
-    }
-
     private void SceneChanged(Scene from, Scene to)
     {
+		StartCoroutine("SceneChangedCoroutine");
+	}
+
+    private IEnumerator SceneChangedCoroutine()
+    {
+        Destroy(playInstance);
+        for (int i = 0; i < 11; ++i)
+        {
+			// TNH patches
+			if (GameObject.Find("_GameManager") != null || FindObjectOfType<TNH_Manager>() != null)
+			{
+				Logger.LogInfo("We are in a TNH game!");
+				playInstance = new GameObject().AddComponent<InPlay>();
+                playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
+                break;
+			}
+			else
+			{
+				Logger.LogInfo(String.Format("Couldn't find a TNH game. Trying again...({0}/10)", i));
+				yield return new WaitForEndOfFrame();
+			}
+        }
+
+        if (playInstance == null)
+        {
+            Logger.LogInfo("We are NOT in a TNH game!");
+        }
+
+        // setup non-TNH specific static objects
+        // running AFTER searching for TNH_Manager ensures we have everything initialized
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
         hpDisplay = FindObjectOfType<FVRHealthBar>();
-        GetFonts();
-
         // apply health counter tweaks globally
         if (hpDisplay != null)
         {
@@ -112,34 +131,7 @@ public static AssetBundle bundle;
         {
             WristMenuAPI.Buttons.Remove(wmbHPToggle);
         }
-
-		StartCoroutine("TryTNH");
-	}
-
-    private IEnumerator TryTNH()
-    {
-        for (int i = 0; i < 11; ++i)
-        {
-			// TNH patches
-			if (GameObject.Find("_GameManager") != null || FindObjectOfType<TNH_Manager>() != null)
-			{
-				Logger.LogInfo("We are in a TNH game!");
-				instance = new GameObject().AddComponent<InPlay>();
-                break;
-			}
-			else
-			{
-				Logger.LogInfo(String.Format("Couldn't find a TNH game. Trying again...({0}/10)", i));
-				yield return new WaitForEndOfFrame();
-			}
-        }
-
-        // destroy self only if we are FOR SURE not in a TNH game
-        if (GameObject.Find("_GameManager") == null || FindObjectOfType<TNH_Manager>() == null)
-        {
-            Logger.LogInfo("We are NOT in a TNH game!");
-            Destroy(instance);
-        }
+        GetFonts();
     }
     
     // called on scene change, find fonts from game if they're not set

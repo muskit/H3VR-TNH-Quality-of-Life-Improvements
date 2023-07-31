@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using FistVR;
 
 // To be attached to FVRHealthBar object
-public class HPHideWhenAiming : MonoBehaviour {
+public class HPHideWhenAiming : MonoBehaviour
+{
     CanvasGroup canvasGroup;
 
     GameObject gObjHUD;
@@ -25,7 +24,8 @@ public class HPHideWhenAiming : MonoBehaviour {
     //LineRenderer colliderRenderer;
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         gObjHUD = transform.GetChild(0).gameObject;
         leftHand = MeatKitPlugin.playerCamera.transform.parent.GetChild(1).GetComponent<FVRViveHand>();
         rightHand = MeatKitPlugin.playerCamera.transform.parent.GetChild(0).GetComponent<FVRViveHand>();

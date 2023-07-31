@@ -1,6 +1,4 @@
-﻿using HarmonyLib;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 using FistVR;
 
 namespace TNHQoLImprovements
@@ -32,7 +30,6 @@ namespace TNHQoLImprovements
 
 		void OnDestroy()
 		{
-			// Destroy statics
 			tnhManager = null;
 		}
 	}

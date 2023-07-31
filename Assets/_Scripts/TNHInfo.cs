@@ -95,8 +95,8 @@ namespace TNHQoLImprovements
 
         private void Update()
         {
-            // game over area; do not update anything else
-            if (InPlay.tnhManager.Phase == TNH_Phase.Dead || InPlay.tnhManager.Phase == TNH_Phase.Completed)
+			// game over area; do not update anything else
+			if (InPlay.tnhManager.Phase == TNH_Phase.Dead || InPlay.tnhManager.Phase == TNH_Phase.Completed)
             {
                 if (tokenCounter != null)
                     tokenCounter.SetActive(true);
