@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System.Reflection;
 using UnityEngine;
 using FistVR;
 
@@ -6,23 +7,55 @@ namespace TNHQoLImprovements
 {
     class TNHInfo : MonoBehaviour
     {
-        private GameObject holdCounter;
+		public static TNHInfo instance;
+
+        public  Transform[] hands;
+		private GameObject holdCounter;
         private GameObject tokenCounter;
         private GameObject waveCounter;
 
-        public void Start()
+        // Bring extra info into game over
+		public static void Patch(Harmony harmony)
         {
-            if (MeatKitPlugin.cfgShowHolds.Value)
+			var original = typeof(TNH_Manager).GetMethod("SetPhase", BindingFlags.NonPublic | BindingFlags.Instance);
+			var patch = typeof(TNHInfo).GetMethod("MoveStatsToController", BindingFlags.NonPublic | BindingFlags.Static);
+			harmony.Patch(original, postfix: new HarmonyMethod(patch));
+		}
+
+		private static void MoveStatsToController(TNH_Phase p)
+        {
+			if (InPlay.tnhManager == null)
+				return;
+
+            if (p == TNH_Phase.Dead || p == TNH_Phase.Completed)
+            {
+				int handSide = InPlay.tnhManager.RadarHand == TNH_RadarHand.Left ? 0 : 1;
+
+				instance.transform.SetParent(instance.hands[handSide], false);
+				instance.GetComponent<TNHInfo>().GameOverPos();
+			}
+		}
+
+        void Start()
+        {
+			instance = this;
+
+			if (MeatKitPlugin.cfgShowHolds.Value)
                 holdCounter = Instantiate<GameObject>(MeatKitPlugin.bundle.LoadAsset<GameObject>("HoldCounter"), transform);
             if (MeatKitPlugin.cfgShowTokens.Value)
                 tokenCounter = Instantiate<GameObject>(MeatKitPlugin.bundle.LoadAsset<GameObject>("TokenCounter"), transform);
             if (MeatKitPlugin.cfgShowWaves.Value)
                 waveCounter = Instantiate<GameObject>(MeatKitPlugin.bundle.LoadAsset<GameObject>("WaveCounter"), transform);
 
+            var rig = Object.FindObjectOfType<FVRMovementManager>().transform;
+            hands = new Transform[] {
+				rig.transform.GetChild(1), rig.transform.GetChild(0)
+			};
+
             PlayPos();
         }
 
-        public void PlayPos()
+        private void PlayPos()
         {
             transform.localPosition = new Vector3(0, 0, -1.2f);
             if (holdCounter != null)
@@ -35,7 +68,7 @@ namespace TNHQoLImprovements
                 waveCounter.transform.localPosition = new Vector3(333, 0, 0);
         }
 
-        public void GameOverPos()
+        private void GameOverPos()
         {
             transform.localScale = new Vector3(.0002f, .0002f, .0002f);
             transform.localPosition = Vector3.zero;
@@ -60,7 +93,7 @@ namespace TNHQoLImprovements
             }
         }
 
-        public void Update()
+        private void Update()
         {
             // game over area; do not update anything else
             if (InPlay.tnhManager.Phase == TNH_Phase.Dead || InPlay.tnhManager.Phase == TNH_Phase.Completed)
@@ -100,5 +133,10 @@ namespace TNHQoLImprovements
                     waveCounter.SetActive(false);
             }
         }
+
+        void OnDestroy()
+        {
+			instance = null;
+		}
     }
 }

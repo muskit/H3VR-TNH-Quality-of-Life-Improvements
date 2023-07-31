@@ -83,6 +83,15 @@ public static AssetBundle bundle;
 
     private Harmony harmony;
 
+    // Could soft-lock if we're not in TNH!
+    public static IEnumerator WaitForTNHInit()
+    {
+        while (InPlay.tnhManager == null || FindObjectOfType<TNH_Manager>() == null)
+        {
+            yield return null;
+        }
+    }
+
     private void SceneChanged(Scene from, Scene to)
     {
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -274,7 +283,7 @@ public static AssetBundle bundle;
 
         // stick stats to hand after game over
         if (cfgShowHolds.Value || cfgShowTokens.Value)
-            InPlay.Patch(harmony);
+            TNHInfo.Patch(harmony);
         
         // show numerical representation of shop values
         if (cfgShowNumbersAtShop.Value)
@@ -284,7 +293,9 @@ public static AssetBundle bundle;
             // player tokens
             ShopTokenPatch.Patch(harmony);
         }
-    }
+
+		Logger.LogInfo("Successfully ran patches!");
+	}
 
     private void ToggleHPVisibility(object sender, ButtonClickEventArgs args)
     {

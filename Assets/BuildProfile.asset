@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PackageName: TNH_Quality_of_Life_Improvements
   Author: muskit
-  Version: 1.2.4
+  Version: 1.2.5
   Icon: {fileID: 2800000, guid: af542f3f6d6914f4e96d0326e8b296cc, type: 3}
   ReadMe: {fileID: 102900000, guid: efa2d6091ed77bd4b879a74bd81d6cbc, type: 3}
   WebsiteURL: https://github.com/muskit/TNH-Quality-of-Life-Improvements
