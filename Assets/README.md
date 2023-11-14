@@ -2,7 +2,7 @@
 Ever got frustrated checking your HP against a bright ceiling in TNH?  
 Have you forgotten how many Holds you're playing for, so you don't know if you should spend all your tokens?  
 And... wait, which hold are you on again?  
-**This mod adds quality of life improvements to the *Take and Hold* experience that help with these questions, and then some.**
+**This mod adds quality of life improvements to the *Take and Hold* experience that seek to address various littles issues like those aforementioned.**
 
 ## Features
 * Health counter toggle
@@ -20,6 +20,7 @@ Toggle and customize these features in your mod manager's *Config editor*.
 **This mod will not disqualify you from Steam or TNHTweaker leaderboards.**
 
 For any issues/ideas, please create an issue at the GitHub repository (linked on Thunderstore page).
+You can also contact me on Discord either by messaging or pinging me `@muskit` in one of the modding servers.
 
 ## Changelog
 1.2.5
