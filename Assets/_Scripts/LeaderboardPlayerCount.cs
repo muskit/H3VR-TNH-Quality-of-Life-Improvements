@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using BepInEx.Bootstrap;
 using UnityEngine;
 using UnityEngine.UI;
 using FistVR;
@@ -15,26 +14,21 @@ namespace TNHQoLImprovements
 		private bool tnhTweakerInstalled = false;
 
 		private string curID;
-		private string loadingStr;
 
 		private TNH_ScoreDisplay scoreDisplay;
 		private Text lblGlobalScores;
-		private GameObject gObjLoading;
 
         #region INITIALIZATION
-		public void Init(TNH_ScoreDisplay tnhScore, Text scoreLabel, GameObject gObjLoading)
+		public void Init(TNH_ScoreDisplay tnhScore, Text scoreLabel)
 		{
 			if (initialized)
 				return;
 
             // don't run with TNHTweaker installed
-            this.gObjLoading = gObjLoading;
             var loadedAssemblies = System.AppDomain.CurrentDomain.GetAssemblies();
             if (Array.Exists<Assembly>(loadedAssemblies, x => x.GetName().Name == "TakeAndHoldTweaker"))
             {
                 tnhTweakerInstalled = true;
-                this.gObjLoading.transform.GetChild(0).GetComponent<Text>().text = "<color=lightblue><size=30>Online leaderboards player count unavailable for TNHTweaker.</size></color>";
-                this.gObjLoading.SetActive(true);
                 return;
             }
 
@@ -42,9 +36,6 @@ namespace TNHQoLImprovements
 			this.lblGlobalScores = scoreLabel;
 			this.lblGlobalScores.resizeTextForBestFit = true;
 			this.lblGlobalScores.horizontalOverflow = HorizontalWrapMode.Overflow;
-			loadingStr = gObjLoading.GetComponentInChildren<Text>().text;
-
-			
 
 			initialized = true;
 		}
@@ -71,20 +62,16 @@ namespace TNHQoLImprovements
 
                 lblGlobalScores.text = "Global Scores: <color=lightblue>(" + playerCountText + " players)</color>";
                 curID = id;
-				gObjLoading.SetActive(false);
             }
             catch (KeyNotFoundException e)
             {
                 lblGlobalScores.text = "Global Scores:";
-				gObjLoading.GetComponentInChildren<Text>().text = loadingStr;
-				gObjLoading.SetActive(true);
                 curID = null;
             }
             catch (Exception e)
             {
-                gObjLoading.GetComponentInChildren<Text>().text = string.Format("<color=lightblue><size=30>Unknown error occured trying to retrieve online player count.</size></color>\n" +
-					"<color=red>{0}</color>", e);
-                gObjLoading.SetActive(true);
+                MeatKitPlugin.Logger.LogWarning("Unknown error occurred trying to retrieve online player count.");
+                MeatKitPlugin.Logger.LogWarning(e);
 			}
         }
     }

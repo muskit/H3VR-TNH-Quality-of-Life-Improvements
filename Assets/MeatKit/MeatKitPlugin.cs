@@ -70,11 +70,6 @@ public static AssetBundle bundle;
     // Take and Hold modifications
     private static InPlay playInstance;
 
-    // Searching for old leaderboards player count mod to disable
-    private float lpcSearchTime;
-    private bool lpcStopSearching = false;
-    private float lpcModSearchTimeEnd;
-
     public static FVRHealthBar hpDisplay;
     
     // toggle HP visibility from wrist menu
@@ -91,7 +86,7 @@ public static AssetBundle bundle;
     private IEnumerator SceneChangedCoroutine()
     {
         Destroy(playInstance);
-        for (int i = 0; i < 11; ++i)
+        for (int i = 1; i <= 10; ++i)
         {
 			// TNH patches
 			if (GameObject.Find("_GameManager") != null || FindObjectOfType<TNH_Manager>() != null)
@@ -101,11 +96,8 @@ public static AssetBundle bundle;
                 playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
                 break;
 			}
-			else
-			{
-				Logger.LogInfo(String.Format("Couldn't find a TNH game. Trying again...({0}/10)", i+1));
-				yield return new WaitForEndOfFrame();
-			}
+            // Logger.LogInfo(String.Format("Couldn't find a TNH game. Checking again...({0}/10)", i));
+            yield return new WaitForEndOfFrame();
         }
 
         if (playInstance == null)
@@ -162,7 +154,6 @@ public static AssetBundle bundle;
     public MeatKitPlugin(): base()
     {
         harmony = new Harmony("muskit.TNHQualityOfLifeImprovements");
-        lpcSearchTime = 30f + 30f * Mathf.Sin(System.DateTime.Today.DayOfYear / 365f); // lolz
     }
 
     // You are free to edit this method, however please ensure LoadAssets is still called somewhere inside it.
@@ -245,9 +236,6 @@ public static AssetBundle bundle;
                                                 HealthExpireIndicationType.Flashing,
                                                 "Add a visual indication on the Health Crystal's despawn timer.");
 
-        // calculate end time to search for my deprecated Leaderboard
-        lpcModSearchTimeEnd = Time.time + lpcSearchTime;
-
         wmbHPToggle = new WristMenuButton("Toggle HP Display", ToggleHPVisibility);
 
         RunPatches();
@@ -296,30 +284,6 @@ public static AssetBundle bundle;
             hpDisplay.gameObject.SetActive(hpDisplayEnabled);
     }
 
-    /// <summary>
-    /// Its only purpose: to kill the deprecated TNH Leaderboard Player Count mod.
-    /// </summary>
-    private void Update()
-    {
-        if (lpcStopSearching)
-            return;
-
-        foreach (var plugin in Chainloader.PluginInfos)
-        {
-            if (plugin.Key == "me.muskit.tnhLeaderboardPlayerCount")
-            {
-                Logger.LogWarning("TNH Leaderboard Player Count mod detected. Destroying it to avoid interference.");
-                Destroy(plugin.Value.Instance);
-                lpcStopSearching = true;
-            }
-        }
-
-        if (Time.realtimeSinceStartup >= lpcModSearchTimeEnd)
-        {
-            Logger.LogInfo(string.Format("Stopping search for TNH Leaderboard Player Count mod after {0} seconds.", lpcSearchTime));
-            lpcStopSearching = true;
-        }
-    }
 
     // DO NOT CHANGE OR REMOVE THIS METHOD. It's contents will be overwritten when building your package.
     private void LoadAssets()
