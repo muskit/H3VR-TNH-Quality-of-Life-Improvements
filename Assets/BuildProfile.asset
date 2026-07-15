@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PackageName: TNH_Quality_of_Life_Improvements
   Author: muskit
-  Version: 1.2.5
+  Version: 1.2.6
   Icon: {fileID: 2800000, guid: af542f3f6d6914f4e96d0326e8b296cc, type: 3}
   ReadMe: {fileID: 102900000, guid: efa2d6091ed77bd4b879a74bd81d6cbc, type: 3}
   WebsiteURL: https://github.com/muskit/TNH-Quality-of-Life-Improvements
@@ -26,5 +26,5 @@ MonoBehaviour:
   ApplyHarmonyPatches: 1
   BuildItems:
   - {fileID: 11400000, guid: ccaff18373cd99848b344316974e6d46, type: 2}
-  BuildAction: 2
-  OutputProfile: C:/Users/Alex/AppData/Roaming/r2modmanPlus-local/H3VR/profiles/dev
+  BuildAction: 1
+  OutputProfile: C:/ModsThunderstore/H3VR/profiles/TNH QoL Dev
